@@ -3,7 +3,7 @@ import App from "./App.vue";
 import router from "./router";
 import store from "./store";
 import "ant-design-vue/dist/antd.less";
-import { Button, message, Input } from "ant-design-vue";
+import { Button, message, Input, Card } from "ant-design-vue";
 
 Vue.config.productionTip = false;
 
@@ -20,6 +20,8 @@ const requireComponent = require.context(
 // antd 按需引入
 Vue.use(Button);
 Vue.use(Input);
+Vue.use(Card);
+
 Vue.prototype.$message = message;
 
 requireComponent.keys().forEach(fileName => {

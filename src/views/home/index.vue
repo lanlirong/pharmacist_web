@@ -13,6 +13,7 @@
       </a-input>
       <a-button size="large" type="primary">搜索</a-button>
     </div>
+    <!-- 搜索 -->
     <!-- 入口 -->
     <ul class="item-container">
       <li>
@@ -60,14 +61,23 @@
         <p class="item-des">发帖、分享、交流</p>
       </li>
     </ul>
+    <!-- 入口 -->
+    <div class="card-container">
+      <!-- 热门帖子 卡片 -->
+      <hot-post />
+      <!--热门文章 卡片 -->
+      <hot-article />
+    </div>
   </div>
 </template>
 
 <script>
+import hotArticle from "./hot-article";
+import hotPost from "./hot-post";
 import { _recommend } from "@/services/api/consult.js";
 export default {
   name: "Home",
-  components: {},
+  components: { hotArticle, hotPost },
   data() {
     return {
       searchKey: ""
@@ -122,7 +132,7 @@ export default {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
-    margin-bottom: 20px;
+    margin-bottom: 40px;
     li {
       width: 270px;
       // height: 200px;
@@ -160,6 +170,17 @@ export default {
         transform: scale(1.02);
         border: 1px solid @theme-color;
       }
+    }
+  }
+  .card-container {
+    display: flex;
+    width: 100%;
+    .hot-post {
+      margin-right: 20px;
+      flex: 1;
+    }
+    .hot-article {
+      // width: 400px;
     }
   }
 }

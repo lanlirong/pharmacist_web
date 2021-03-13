@@ -33,8 +33,6 @@ export default {
 
 <style lang="less" scoped>
 .svg-icon {
-  // width: 18px;
-  // height: 18px;
   display: inline-block;
   vertical-align: middle;
 }
