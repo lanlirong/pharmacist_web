@@ -60,6 +60,7 @@
         <p class="item-title">药师社区</p>
         <p class="item-des">发帖、分享、交流</p>
       </li>
+      <svg-icon class="city-img" iconClass="city" />
     </ul>
     <!-- 入口 -->
     <div class="card-container">
@@ -130,12 +131,13 @@ export default {
   }
   .item-container {
     display: flex;
+    position: relative;
     flex-wrap: wrap;
     justify-content: space-between;
-    margin-bottom: 40px;
+    padding-bottom: 90px;
+    margin-bottom: 0;
     li {
       width: 270px;
-      // height: 200px;
       margin-top: 20px;
       background-color: #fff;
       border-radius: 4px;
@@ -148,6 +150,7 @@ export default {
       box-sizing: border-box;
       cursor: pointer;
       transition: all 0.4s;
+      z-index: 9;
       .item-img {
         display: flex;
         align-items: center;
@@ -170,6 +173,13 @@ export default {
         transform: scale(1.02);
         border: 1px solid @theme-color;
       }
+    }
+    .city-img {
+      position: absolute;
+      right: -110px;
+      bottom: 0;
+      z-index: 1;
+      transform: rotateY(180deg);
     }
   }
   .card-container {

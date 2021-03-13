@@ -31,9 +31,9 @@ export default {};
       font-size: 16px;
       color: @theme-color;
       .svg-icon {
-          width: 18px;
-          height: 18px;
-          margin-left: 5px;
+        width: 18px;
+        height: 18px;
+        margin-left: 5px;
       }
     }
   }
