@@ -64,6 +64,7 @@
 </template>
 
 <script>
+import { _recommend } from "@/services/api/consult.js";
 export default {
   name: "Home",
   components: {},
@@ -71,6 +72,15 @@ export default {
     return {
       searchKey: ""
     };
+  },
+  mounted() {
+    this.getrecommend();
+  },
+  methods: {
+    async getrecommend() {
+      const data = await _recommend({});
+      console.log(data);
+    }
   }
 };
 </script>

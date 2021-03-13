@@ -16,13 +16,14 @@ export default {};
   justify-content: center;
   align-items: center;
   img {
-    width: 50%;
+    width: 40%;
     margin-top: 20px;
   }
   span {
     color: @text-color;
     display: block;
     margin: 20px 20px 40px;
+    font-size: 16px;
   }
 }
 </style>
