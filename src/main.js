@@ -1,17 +1,29 @@
-import Vue from "vue";
-import App from "./App.vue";
-import router from "./router";
-import store from "./store";
-import "ant-design-vue/dist/antd.less";
-import { Button, message, Input, Card } from "ant-design-vue";
+import Vue from 'vue';
+import App from './App.vue';
+import router from './router';
+import store from './store';
+import 'ant-design-vue/dist/antd.less';
+import '@/assets/style/reset.css';
+import {
+  Button,
+  message,
+  Input,
+  Card,
+  Comment,
+  Tooltip,
+  Avatar,
+  Icon,
+  List,
+  BackTop
+} from 'ant-design-vue';
 
 Vue.config.productionTip = false;
 
-import "./assets/index"; // svg图标管理
+import './assets/index'; // svg图标管理
 // 注册全局组件
 const requireComponent = require.context(
   // 其组件目录的相对路径
-  "./components",
+  './components',
   // 是否查询其子目录
   true,
   // 匹配基础组件文件名的正则表达式
@@ -21,6 +33,12 @@ const requireComponent = require.context(
 Vue.use(Button);
 Vue.use(Input);
 Vue.use(Card);
+Vue.use(Comment);
+Vue.use(Tooltip);
+Vue.use(Avatar);
+Vue.use(Icon);
+Vue.use(List);
+Vue.use(BackTop);
 
 Vue.prototype.$message = message;
 
@@ -33,4 +51,4 @@ new Vue({
   router,
   store,
   render: h => h(App)
-}).$mount("#app");
+}).$mount('#app');

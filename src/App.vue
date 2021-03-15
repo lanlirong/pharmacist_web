@@ -5,15 +5,17 @@
       <router-view />
     </div>
     <Footer />
+    <!-- 返回顶部 -->
+    <a-back-top />
   </div>
 </template>
 
 <script>
-import Header from "@/views/layout/header.vue";
-import Footer from "@/views/layout/footer.vue";
+import Header from '@/views/layout/header.vue';
+import Footer from '@/views/layout/footer.vue';
 
 export default {
-  name: "app",
+  name: 'app',
   components: {
     Header,
     Footer

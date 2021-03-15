@@ -1,3 +1,3 @@
-import instance from "./http-interceptors";
+import instance from './http-interceptors';
 // do something
 export default instance;

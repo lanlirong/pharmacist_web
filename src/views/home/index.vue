@@ -16,46 +16,46 @@
     <!-- 搜索 -->
     <!-- 入口 -->
     <ul class="item-container">
-      <li>
+      <li @click="toSearch('drug')">
         <div class="item-img"><svg-icon iconClass="drug"></svg-icon></div>
         <p class="item-title">药品检索</p>
         <p class="item-des">常见药物的基本信息、药品说明书、主治疾病检索</p>
       </li>
-      <li>
+      <li @click="toSearch('interaction')">
         <div class="item-img">
           <svg-icon iconClass="interaction"></svg-icon>
         </div>
         <p class="item-title">药物相互作用</p>
         <p class="item-des">可视化展示药物有效成分之间的相互作用关系</p>
       </li>
-      <li>
+      <li @click="toSearch('disease')">
         <div class="item-img"><svg-icon iconClass="disease"></svg-icon></div>
         <p class="item-title">疾病检索</p>
         <p class="item-des">常见疾病的基本信息、常用治疗药物检索</p>
       </li>
-      <li>
+      <li @click="toSearch('consult')">
         <div class="item-img"><svg-icon iconClass="consult"></svg-icon></div>
         <p class="item-title">用药咨询</p>
         <p class="item-des">常见疾病的用药咨询及标准化解答</p>
       </li>
-      <li>
+      <li @click="toSearch('science')">
         <div class="item-img"><svg-icon iconClass="science"></svg-icon></div>
         <p class="item-title">科普宣教</p>
         <p class="item-des">药学相关信息的科普文章</p>
       </li>
-      <li>
+      <li @click="toSearch('calendar')">
         <div class="item-img"><svg-icon iconClass="calendar"></svg-icon></div>
         <p class="item-title">药历构建</p>
         <p class="item-des">为特殊患者建立药历，可用于慢病管理</p>
       </li>
-      <li>
+      <li @click="toSearch('bad-reaction')">
         <div class="item-img">
           <svg-icon iconClass="bad-reaction"></svg-icon>
         </div>
         <p class="item-title">不良反应共建</p>
         <p class="item-des">发布药物不良反应案例，共建不良反应信息库</p>
       </li>
-      <li>
+      <li @click="toSearch('community')">
         <div class="item-img"><svg-icon iconClass="community"></svg-icon></div>
         <p class="item-title">药师社区</p>
         <p class="item-des">发帖、分享、交流</p>
@@ -73,15 +73,15 @@
 </template>
 
 <script>
-import hotArticle from "./hot-article";
-import hotPost from "./hot-post";
-import { _recommend } from "@/services/api/consult.js";
+import hotArticle from './hot-article';
+import hotPost from './hot-post';
+import { _recommend } from '@/services/api/consult.js';
 export default {
-  name: "Home",
+  name: 'Home',
   components: { hotArticle, hotPost },
   data() {
     return {
-      searchKey: ""
+      searchKey: ''
     };
   },
   mounted() {
@@ -91,6 +91,10 @@ export default {
     async getrecommend() {
       const data = await _recommend({});
       console.log(data);
+    },
+    toSearch(path) {
+      let routeData = this.$router.resolve('/' + path);
+      window.open(routeData.href, '_blank');
     }
   }
 };
@@ -188,9 +192,6 @@ export default {
     .hot-post {
       margin-right: 20px;
       flex: 1;
-    }
-    .hot-article {
-      // width: 400px;
     }
   }
 }
