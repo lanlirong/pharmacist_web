@@ -104,7 +104,7 @@ export default {
 .home {
   width: 1200px;
   margin: 0 auto;
-  padding: 0 20px 40px;
+  padding: 0 20px 80px;
   .search-container {
     width: 60%;
     height: 40px;

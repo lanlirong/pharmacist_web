@@ -14,7 +14,10 @@ import {
   Avatar,
   Icon,
   List,
-  BackTop
+  BackTop,
+  Radio,
+  FormModel,
+  Table
 } from 'ant-design-vue';
 
 Vue.config.productionTip = false;
@@ -39,6 +42,9 @@ Vue.use(Avatar);
 Vue.use(Icon);
 Vue.use(List);
 Vue.use(BackTop);
+Vue.use(Radio);
+Vue.use(FormModel);
+Vue.use(Table);
 
 Vue.prototype.$message = message;
 
