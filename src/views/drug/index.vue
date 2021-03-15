@@ -1,11 +1,14 @@
 <template>
   <div class="drug">
-    <!-- 搜索区域 -->
+    <!-- 搜索区域 start-->
     <search />
-    <!-- 搜索区域 -->
-    <!-- 结果区域 -->
+    <!-- 搜索区域 end-->
+    <!-- 结果区域 start-->
     <result />
-    <!-- 结果区域 -->
+    <!-- 结果区域 end-->
+    <!-- 数据说明区域 start-->
+    <introduction />
+    <!-- 数据说明区域 end-->
   </div>
 </template>
 
@@ -14,10 +17,12 @@
 import { DRUG_TYPE_ARR } from '@/utils/constant';
 import search from './search';
 import result from './result';
+import introduction from './introduction';
 export default {
   components: {
     search,
-    result
+    result,
+    introduction
   },
   data() {
     return {

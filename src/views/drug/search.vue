@@ -18,9 +18,11 @@
       </a-radio-group>
     </div>
     <!-- 高级搜索按钮 -->
-    <div class="senior-text">高级搜索...<svg-icon iconClass="search" /></div>
+    <div class="senior-text" @click="changeSenior">
+      高级搜索...<svg-icon iconClass="search" />
+    </div>
     <!-- 高级搜索 -->
-    <div v-if="false" class="senior-input-container"></div>
+    <div v-if="false" class="senior-input-container">11</div>
   </div>
 </template>
 
@@ -38,6 +40,9 @@ export default {
   methods: {
     onRadioChange(e) {
       console.log(e.target.value);
+    },
+    changeSenior() {
+      this.showSenior = !this.showSenior;
     }
   }
 };
