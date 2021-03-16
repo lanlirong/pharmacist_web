@@ -17,7 +17,9 @@ import {
   BackTop,
   Radio,
   FormModel,
-  Table
+  Table,
+  Collapse,
+  Checkbox
 } from 'ant-design-vue';
 
 Vue.config.productionTip = false;
@@ -45,6 +47,8 @@ Vue.use(BackTop);
 Vue.use(Radio);
 Vue.use(FormModel);
 Vue.use(Table);
+Vue.use(Collapse);
+Vue.use(Checkbox);
 
 Vue.prototype.$message = message;
 

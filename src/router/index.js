@@ -20,8 +20,22 @@ const routes = [
   {
     path: '/drug',
     name: 'Drug',
-    component: () =>
-      import(/* webpackChunkName: "drug" */ '../views/drug/index.vue')
+    redirect: '/drug/search',
+    component: { render: h => h('router-view', '') },
+    children: [
+      {
+        path: 'search',
+        name: 'DrugSearch',
+        component: () =>
+          import(/* webpackChunkName: "drug" */ '../views/drug/index.vue')
+      },
+      {
+        path: 'detail',
+        name: 'DrugDetail',
+        component: () =>
+          import(/* webpackChunkName: "drug" */ '../views/drug/detail.vue')
+      }
+    ]
   },
   {
     path: '/:catchAll(.*)',

@@ -1,18 +1,10 @@
 <template>
   <div class="drug-result">
+    <!-- 结果过滤 -->
     <div class="filter">
-      <a-list>
-        <div class="header" slot="header">
-          在结果中筛选
-        </div>
-        <a-list-item>1 </a-list-item>
-        <a-list-item>1 </a-list-item>
-        <a-list-item>1 </a-list-item>
-        <a-list-item>1 </a-list-item>
-        <a-list-item>1 </a-list-item>
-        <a-list-item>1 </a-list-item>
-      </a-list>
+      <result-filter />
     </div>
+    <!--结果列表 -->
     <div class="main">
       <div class="download">
         您已选择<span>{{ selectCount }}</span
@@ -38,6 +30,7 @@
   </div>
 </template>
 <script>
+import resultFilter from './result-filter';
 const columns = [
   {
     title: '药品名称',
@@ -88,11 +81,10 @@ export default {
       total: 46
     };
   },
-  computed: {
-    hasSelected() {
-      return this.selectedRowKeys.length > 0;
-    }
+  components: {
+    resultFilter
   },
+  computed: {},
   methods: {
     start() {
       this.loading = true;
@@ -119,14 +111,6 @@ export default {
   .filter {
     width: 250px;
     margin-right: 20px;
-    .ant-list {
-      background-color: #fff;
-      box-shadow: @box-shadow;
-      padding: 20px;
-      .header {
-        font-weight: 700;
-      }
-    }
   }
   .main {
     flex: 1;

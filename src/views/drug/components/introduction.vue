@@ -18,7 +18,7 @@
         </div>
       </li>
       <li>
-        <h2>功能介绍</h2>
+        <h2>其他说明</h2>
         <div class="des">
           <p>xxxxxxxsdfgfhghghg</p>
           <p>xxxxxxxsdfgfhghghg</p>
@@ -32,10 +32,9 @@
 <style lang="less" scoped>
 .introduction {
   padding-bottom: 40px;
-
   display: flex;
   justify-content: center;
-  margin-top: 20px;
+  margin-top: 80px;
   background-color: #fff;
   .intro-container {
     width: 1200px;

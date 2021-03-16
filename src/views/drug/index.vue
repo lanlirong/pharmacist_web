@@ -15,9 +15,9 @@
 >
 <script>
 import { DRUG_TYPE_ARR } from '@/utils/constant';
-import search from './search';
-import result from './result';
-import introduction from './introduction';
+import search from './components/search';
+import result from './components/result';
+import introduction from './components/introduction';
 export default {
   components: {
     search,
