@@ -1,7 +1,7 @@
 <template>
   <div class="result-filter">
     <div class="header">
-      在结果中筛选：
+      在结果中筛选：<a-button type="primary" size="small" ghost>确认</a-button>
     </div>
     <a-collapse>
       <a-collapse-panel key="1" header="剂型">
@@ -73,7 +73,11 @@ export default {
   padding: 20px;
   .header {
     font-weight: 700;
-    margin-bottom: 15px;
+    line-height: 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
   }
 }
 </style>

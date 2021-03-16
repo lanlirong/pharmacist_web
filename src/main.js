@@ -19,7 +19,11 @@ import {
   FormModel,
   Table,
   Collapse,
-  Checkbox
+  Checkbox,
+  Col,
+  Row,
+  Tag,
+  Pagination
 } from 'ant-design-vue';
 
 Vue.config.productionTip = false;
@@ -49,6 +53,10 @@ Vue.use(FormModel);
 Vue.use(Table);
 Vue.use(Collapse);
 Vue.use(Checkbox);
+Vue.use(Col);
+Vue.use(Row);
+Vue.use(Tag);
+Vue.use(Pagination);
 
 Vue.prototype.$message = message;
 

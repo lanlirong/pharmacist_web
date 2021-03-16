@@ -27,7 +27,7 @@
 </template>
 
 <script>
-import { DRUG_TYPE_ARR } from '@/utils/constant';
+import { DRUG_TYPE_ARR } from '@/utils/constant/drug';
 export default {
   data() {
     return {

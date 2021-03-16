@@ -14,7 +14,7 @@
 
 >
 <script>
-import { DRUG_TYPE_ARR } from '@/utils/constant';
+import { DRUG_TYPE_ARR } from '@/utils/constant/drug.js';
 import search from './components/search';
 import result from './components/result';
 import introduction from './components/introduction';
