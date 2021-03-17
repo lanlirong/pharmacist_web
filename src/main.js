@@ -2,6 +2,9 @@ import Vue from 'vue';
 import App from './App.vue';
 import router from './router';
 import store from './store';
+import './utils/filters'; // 全局过滤器
+import './assets/index'; // svg图标管理
+// antd
 import 'ant-design-vue/dist/antd.less';
 import '@/assets/style/reset.css';
 import {
@@ -23,21 +26,13 @@ import {
   Col,
   Row,
   Tag,
-  Pagination
+  Pagination,
+  Descriptions,
+  AutoComplete
 } from 'ant-design-vue';
 
 Vue.config.productionTip = false;
 
-import './assets/index'; // svg图标管理
-// 注册全局组件
-const requireComponent = require.context(
-  // 其组件目录的相对路径
-  './components',
-  // 是否查询其子目录
-  true,
-  // 匹配基础组件文件名的正则表达式
-  /\.g\.vue$/
-);
 // antd 按需引入
 Vue.use(Button);
 Vue.use(Input);
@@ -57,9 +52,20 @@ Vue.use(Col);
 Vue.use(Row);
 Vue.use(Tag);
 Vue.use(Pagination);
+Vue.use(Descriptions);
+Vue.use(AutoComplete);
 
 Vue.prototype.$message = message;
 
+// 注册全局组件
+const requireComponent = require.context(
+  // 其组件目录的相对路径
+  './components',
+  // 是否查询其子目录
+  true,
+  // 匹配基础组件文件名的正则表达式
+  /\.g\.vue$/
+);
 requireComponent.keys().forEach(fileName => {
   const comp = requireComponent(fileName).default;
   Vue.component(comp.name, comp);

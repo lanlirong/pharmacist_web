@@ -1,22 +1,22 @@
 export const DRUG_TYPE_ARR = [
   {
-    value: 1,
+    value: 0,
     label: '药品名'
   },
   {
-    value: 2,
+    value: 1,
     label: '商品名'
   },
   {
-    value: 3,
+    value: 2,
     label: '商品条形码'
   },
   {
-    value: 4,
+    value: 3,
     label: '主要成分'
   },
   {
-    value: 6,
+    value: 4,
     label: '主治疾病'
   }
 ];

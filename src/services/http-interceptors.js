@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { message } from 'ant-design-vue';
 const instance = axios.create({
-  timeout: 3000, // 请求超时时间，3000ms未响应则停止请求
+  timeout: 20000, // 请求超时时间，3000ms未响应则停止请求
   withCredentials: true, // 允许携带cookie
   headers: { 'Content-Type': 'application/json' }
 });

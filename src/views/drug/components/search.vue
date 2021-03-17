@@ -5,24 +5,25 @@
       <div class="input-container">
         <a-input
           size="large"
-          placeholder="请输入药品或疾病名称"
-          v-model="searchKey"
+          :placeholder="palceText"
+          v-model.trim="searchForm.searchKey"
+          @pressEnter="search"
         >
         </a-input>
-        <a-button size="large" type="primary">搜索</a-button>
+        <a-button size="large" type="primary" @click="search">搜索</a-button>
       </div>
-      <a-radio-group v-model="type" @change="onRadioChange">
+      <a-radio-group v-model="searchForm.type" @change="onRadioChange">
         <a-radio v-for="item in radioArr" :key="item.value" :value="item.value">
           {{ item.label }}
         </a-radio>
       </a-radio-group>
     </div>
     <!-- 高级搜索按钮 -->
-    <div class="senior-text" @click="changeSenior">
+    <!-- <div class="senior-text" @click="changeSenior">
       高级搜索...<svg-icon iconClass="search" />
-    </div>
+    </div> -->
     <!-- 高级搜索 -->
-    <div v-if="false" class="senior-input-container">11</div>
+    <!-- <div v-if="false" class="senior-input-container">11</div> -->
   </div>
 </template>
 
@@ -31,18 +32,30 @@ import { DRUG_TYPE_ARR } from '@/utils/constant/drug';
 export default {
   data() {
     return {
-      searchKey: '',
-      type: 1,
+      searchForm: {
+        searchKey: '三七丹参胶囊',
+        type: 0
+      },
       radioArr: DRUG_TYPE_ARR,
-      showSenior: false
+      palceText: '请输入药品名，例如三七丹参胶囊'
     };
   },
+  mounted() {},
   methods: {
+    // 修改placeHolder
     onRadioChange(e) {
-      console.log(e.target.value);
+      const palceTexts = [
+        '请输入药品名，例如三七丹参胶囊',
+        '请输入药物商品名，例如安立派',
+        '请输入十三位条形码，例如6934497200398',
+        '请输入药品包含的主要成分，例如人参',
+        '请输入疾病名称，例如高血压'
+      ];
+      this.palceText = palceTexts[e.target.value];
     },
-    changeSenior() {
-      this.showSenior = !this.showSenior;
+    // 搜索
+    search() {
+      this.$emit('search', this.searchForm);
     }
   }
 };
@@ -71,6 +84,9 @@ export default {
       .ant-input {
         border: 1px solid @theme-color;
         border-radius: 4px;
+      }
+      .ant-input-lg {
+        font-size: 14px;
       }
     }
     .ant-radio-group {

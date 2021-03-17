@@ -16,9 +16,9 @@
       </div>
       <div class="list">
         <a-table
-          :columns="columns"
-          :data-source="drugs"
+          :data-source="tableList"
           :loading="tableLoading"
+          :rowKey="row => row.id"
           :row-selection="{
             selectedRowKeys: selectedRowKeys,
             onChange: onSelectChange
@@ -26,27 +26,68 @@
           :pagination="pagination"
           @change="handleTableChange"
         >
-          <div slot="name" slot-scope="name">
-            <router-link to="/drug/detail" target="_blank"
-              ><a>{{ name }}</a></router-link
-            >
-          </div>
-          <div slot="nature_class">
-            <a-tag color="pink">
-              pink
-            </a-tag>
-          </div>
-          <div slot="operate">
-            <router-link to="/drug/detail" target="_blank">
-              <a-tooltip placement="top" title="详情"
-                ><a-button type="link"><a-icon type="file-text"/></a-button
-              ></a-tooltip>
-            </router-link>
-            <a-tooltip placement="top" title="下载"
-              ><a-button type="link"
-                ><a-icon type="vertical-align-bottom"/></a-button
-            ></a-tooltip>
-          </div>
+          <a-table-column
+            title="药品名称"
+            data-index="drug_name"
+            :width="130"
+            sorter
+            :ellipsis="true"
+            ><template slot-scope="drug_name">
+              <router-link to="/drug/detail" target="_blank">{{
+                drug_name | placeholder
+              }}</router-link>
+            </template></a-table-column
+          >
+          <a-table-column
+            title="商品名"
+            data-index="drug_brand"
+            :width="100"
+            sorter
+            :ellipsis="true"
+            ><template slot-scope="drug_brand">{{
+              drug_brand | placeholder
+            }}</template></a-table-column
+          >
+          <a-table-column
+            title="批准文号"
+            data-index="approval_number"
+            :width="180"
+            sorter
+            :ellipsis="true"
+            ><template slot-scope="approval_number">{{
+              approval_number | placeholder
+            }}</template></a-table-column
+          >
+          <a-table-column
+            title="性质分类"
+            data-index="nature_class"
+            :width="100"
+            ><div slot-scope="nature_class">
+              <a-tag :color="nature_tag_color(nature_class)">
+                {{ nature_class | placeholder }}
+              </a-tag>
+            </div></a-table-column
+          >
+          <a-table-column
+            title="主要成分"
+            data-index="constituents"
+            :ellipsis="true"
+            ><template slot-scope="constituents">{{
+              constituents | placeholder
+            }}</template></a-table-column
+          >
+          <a-table-column :width="110" key="action">
+            <template slot-scope="{ id }">
+              <router-link :to="`/drug/detail?id=${id}`" target="_blank">
+                <a-tooltip placement="top" title="详情"
+                  ><a-button type="link"><a-icon type="file-text"/></a-button
+                ></a-tooltip>
+              </router-link>
+              <a-tooltip placement="top" title="下载"
+                ><a-button type="link"
+                  ><a-icon
+                    type="vertical-align-bottom"/></a-button></a-tooltip></template
+          ></a-table-column>
         </a-table>
       </div>
     </div>
@@ -55,71 +96,61 @@
 <script>
 import resultFilter from './result-filter';
 import { DRUG_NATURE_CLASS } from '@/utils/constant/drug.js';
-const columns = [
-  {
-    title: '药品名称',
-    dataIndex: 'name',
-    sorter: true,
-    scopedSlots: { customRender: 'name' }
-  },
-  {
-    title: '商品名',
-    dataIndex: 'drug_brand',
-    sorter: true
-  },
-  {
-    title: '批准文号',
-    dataIndex: 'approval_number',
-    sorter: true
-  },
-  {
-    title: '性质分类',
-    dataIndex: 'nature_class',
-    scopedSlots: { customRender: 'nature_class' }
-  },
-  {
-    title: '主要成分',
-    dataIndex: 'constituents'
-  },
-  {
-    title: '',
-    // dataIndex: 'name',
-    scopedSlots: { customRender: 'operate' }
-  }
-];
 
 export default {
+  props: {
+    tableLoading: {
+      type: Boolean,
+      default: false
+    },
+    total: {
+      type: Number,
+      default: 0
+    },
+    page: {
+      type: [Number, String],
+      default: 0
+    },
+    size: {
+      type: Number,
+      default: 20
+    },
+    tableList: {
+      type: Array,
+      default: () => []
+    }
+  },
   data() {
     return {
-      drugs: [
-        {
-          key: 1,
-          name: 'xxx',
-          drug_brand: 'Edward King 1',
-          approval_number: 'cddds244322 1',
-          nature_class: 'xxxx',
-          constituents: 'London, Park Lane no. 1'
-        }
-      ],
-      columns,
       selectedRowKeys: [], // Check here to configure the default column
-      loading: false,
-      selectCount: 0,
-      total: 46,
-      nature_class: DRUG_NATURE_CLASS,
-      tableLoading: false,
-      pagination: {
-        total: 100,
-        showTotal: (total, range) =>
-          `第${range[0]}-${range[1]}条 / 共${total}条 `,
-        pageSize: 20
-      }
+      selectCount: 0
+      // nature_class: DRUG_NATURE_CLASS
     };
   },
   components: {
     resultFilter
   },
-  computed: {},
+  computed: {
+    pagination() {
+      return {
+        total: this.total,
+        showTotal: (total, range) =>
+          `第${range[0]}-${range[1]}条 / 共${total}条 `,
+        pageSize: this.size
+      };
+    },
+    nature_tag_color() {
+      return function(params) {
+        let color = '';
+        DRUG_NATURE_CLASS.filter(item => {
+          if (item.value === params) {
+            color = item.color;
+          }
+        });
+        return color;
+      };
+    }
+  },
   mounted() {},
   methods: {
     onSelectChange(selectedRowKeys) {
@@ -127,7 +158,33 @@ export default {
       this.selectedRowKeys = selectedRowKeys;
     },
     handleTableChange(pagination, filters, sorter) {
-      console.log(pagination, filters, sorter);
+      // console.log(pagination, filters, sorter);
+      const { current, pageSize } = pagination;
+      const searchForm = {};
+      searchForm.page = current;
+      searchForm.size = pageSize;
+      if (sorter.order) {
+        switch (sorter.columnKey) {
+          case 'drug_name':
+            searchForm.order = sorter.order === 'descend' ? 'desc' : 'asc';
+            searchForm.orderType = 'drug_name';
+            break;
+          case 'drug_brand':
+            searchForm.order = sorter.order === 'descend' ? 'desc' : 'asc';
+            searchForm.orderType = 'drug_brand';
+            break;
+          case 'approval_number':
+            searchForm.order = sorter.order === 'descend' ? 'desc' : 'asc';
+            searchForm.orderType = 'approval_number';
+            break;
+          default:
+            break;
+        }
+      } else {
+        searchForm.orderType = '';
+      }
+
+      this.$emit('tableChange', searchForm);
     }
   }
 };

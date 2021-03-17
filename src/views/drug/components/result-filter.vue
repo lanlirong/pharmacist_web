@@ -4,7 +4,7 @@
       在结果中筛选：<a-button type="primary" size="small" ghost>确认</a-button>
     </div>
     <a-collapse>
-      <a-collapse-panel key="1" header="剂型">
+      <a-collapse-panel key="1" header="性质分类">
         <div>
           <a-checkbox-group @change="onChange">
             <a-row>
