@@ -41,7 +41,7 @@ export default {
       searchForm: {
         searchKey: '',
         type: 0,
-        pagenum: 1,
+        page: 1,
         size: 20,
         order: 'asc',
         orderType: ''
@@ -65,7 +65,7 @@ export default {
     },
     tableChange(searchForm) {
       const { page, size, order, orderType } = searchForm;
-      this.searchForm.pagenum = page || 1;
+      this.searchForm.page = page || 1;
       this.searchForm.size = size || 20;
       this.searchForm.order = order || 'asc';
       this.searchForm.orderType = orderType || '';

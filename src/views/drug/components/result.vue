@@ -28,12 +28,12 @@
         >
           <a-table-column
             title="药品名称"
-            data-index="drug_name"
+            key="drug_name"
             :width="130"
-            sorter
+            :sorter="true"
             :ellipsis="true"
-            ><template slot-scope="drug_name">
-              <router-link to="/drug/detail" target="_blank">{{
+            ><template slot-scope="{ drug_name, id }">
+              <router-link :to="`/drug/detail?id=${id}`" target="_blank">{{
                 drug_name | placeholder
               }}</router-link>
             </template></a-table-column
@@ -41,8 +41,9 @@
           <a-table-column
             title="商品名"
             data-index="drug_brand"
+            key="drug_brand"
             :width="100"
-            sorter
+            :sorter="true"
             :ellipsis="true"
             ><template slot-scope="drug_brand">{{
               drug_brand | placeholder
@@ -51,8 +52,9 @@
           <a-table-column
             title="批准文号"
             data-index="approval_number"
+            key="approval_number"
             :width="180"
-            sorter
+            :sorter="true"
             :ellipsis="true"
             ><template slot-scope="approval_number">{{
               approval_number | placeholder
@@ -61,6 +63,7 @@
           <a-table-column
             title="性质分类"
             data-index="nature_class"
+            key="nature_class"
             :width="100"
             ><div slot-scope="nature_class">
               <a-tag :color="nature_tag_color(nature_class)">
@@ -71,6 +74,7 @@
           <a-table-column
             title="主要成分"
             data-index="constituents"
+            key="constituents"
             :ellipsis="true"
             ><template slot-scope="constituents">{{
               constituents | placeholder
@@ -124,7 +128,6 @@ export default {
     return {
       selectedRowKeys: [], // Check here to configure the default column
       selectCount: 0
-      // nature_class: DRUG_NATURE_CLASS
     };
   },
   components: {
@@ -235,6 +238,9 @@ export default {
       }
       a {
         color: @text-link;
+        &:hover {
+          text-decoration: underline;
+        }
       }
     }
   }

@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { message } from 'ant-design-vue';
+import VueThis from '@/main.js';
 const instance = axios.create({
   timeout: 20000, // 请求超时时间，3000ms未响应则停止请求
   withCredentials: true, // 允许携带cookie
@@ -18,6 +19,15 @@ instance.interceptors.response.use(
       message.error('status:' + status);
       return Promise.reject(data);
     } else {
+      if (data.code === 2) {
+        // 404
+        VueThis.$router.push('/404');
+        return;
+      } else if (data.code === 3) {
+        // 错误
+        VueThis.$router.push('/error');
+        message.error(data.msg);
+      }
       return data;
     }
   },

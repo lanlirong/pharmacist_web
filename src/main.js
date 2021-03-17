@@ -28,7 +28,8 @@ import {
   Tag,
   Pagination,
   Descriptions,
-  AutoComplete
+  AutoComplete,
+  PageHeader
 } from 'ant-design-vue';
 
 Vue.config.productionTip = false;
@@ -54,6 +55,7 @@ Vue.use(Tag);
 Vue.use(Pagination);
 Vue.use(Descriptions);
 Vue.use(AutoComplete);
+Vue.use(PageHeader);
 
 Vue.prototype.$message = message;
 
@@ -71,7 +73,7 @@ requireComponent.keys().forEach(fileName => {
   Vue.component(comp.name, comp);
 });
 
-new Vue({
+export default new Vue({
   router,
   store,
   render: h => h(App)
