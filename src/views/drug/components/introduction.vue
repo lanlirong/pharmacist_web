@@ -52,7 +52,7 @@
       }
     }
     .des {
-      border-left: 4px solid #8597b6;
+      border-left: 3px solid @theme-color-1;
       color: #8597b6;
       padding-left: 10px;
       font-size: 14px;

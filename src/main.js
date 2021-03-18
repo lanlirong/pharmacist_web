@@ -7,6 +7,7 @@ import './assets/index'; // svg图标管理
 // antd
 import 'ant-design-vue/dist/antd.less';
 import '@/assets/style/reset.css';
+import '@/assets/style/antd-reset.css';
 import {
   Button,
   message,
@@ -29,7 +30,8 @@ import {
   Pagination,
   Descriptions,
   AutoComplete,
-  PageHeader
+  PageHeader,
+  Spin
 } from 'ant-design-vue';
 
 Vue.config.productionTip = false;
@@ -56,6 +58,7 @@ Vue.use(Pagination);
 Vue.use(Descriptions);
 Vue.use(AutoComplete);
 Vue.use(PageHeader);
+Vue.use(Spin);
 
 Vue.prototype.$message = message;
 

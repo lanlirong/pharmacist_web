@@ -1,0 +1,10 @@
+/* description */
+.ant-descriptions-bordered .ant-descriptions-item-label,
+  .ant-descriptions-bordered .ant-descriptions-item-content {
+    max-width: 400px;
+    vertical-align: middle;
+  }
+  .middle  .ant-descriptions-item-colon {
+    width: 126px;
+  }
+  

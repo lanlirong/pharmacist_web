@@ -28,7 +28,7 @@ module.exports = {
           'warning-color': '#eac435',
           'error-color': '#f46b45',
           'text-color': '#505050',
-          'border-color-base': '#efefef',
+          'border-color-base': '#e8e8e8',
           'table-row-hover-bg': '#DCE0E9'
         },
         javascriptEnabled: true
