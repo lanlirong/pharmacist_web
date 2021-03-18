@@ -7,10 +7,10 @@
     <!--结果列表 -->
     <div class="main">
       <div class="download">
-        您已选择<span>{{ selectCount }}</span
+        您已选择<span>{{ selectedRowKeys.length }}</span
         >条数据
-        <a-button size="small" type="link">
-          <a-icon type="vertical-align-bottom" />下载
+        <a-button size="small" type="link" @click="downloadAll">
+          <a-icon type="download" />下载
         </a-button>
         <span class="total-text">共查询到{{ total }}条数据</span>
       </div>
@@ -81,16 +81,15 @@
             }}</template></a-table-column
           >
           <a-table-column :width="110" key="action">
-            <template slot-scope="{ id }">
-              <router-link :to="`/drug/detail?id=${id}`" target="_blank">
+            <template slot-scope="row">
+              <router-link :to="`/drug/detail?id=${row.id}`" target="_blank">
                 <a-tooltip placement="top" title="详情"
                   ><a-button type="link"><a-icon type="file-text"/></a-button
                 ></a-tooltip>
               </router-link>
               <a-tooltip placement="top" title="下载"
-                ><a-button type="link"
-                  ><a-icon
-                    type="vertical-align-bottom"/></a-button></a-tooltip></template
+                ><a-button type="link" @click="download(row)"
+                  ><a-icon type="download"/></a-button></a-tooltip></template
           ></a-table-column>
         </a-table>
       </div>
@@ -99,7 +98,11 @@
 </template>
 <script>
 import resultFilter from './result-filter';
-import { DRUG_NATURE_CLASS } from '@/utils/constant/drug.js';
+import {
+  DRUG_NATURE_CLASS,
+  DRUG_DOWNLOAD_HEADER
+} from '@/utils/constant/drug.js';
+import { downloadToExcel, getObjValueArr } from '@/utils/tool.js';
 
 export default {
   props: {
@@ -126,8 +129,7 @@ export default {
   },
   data() {
     return {
-      selectedRowKeys: [], // Check here to configure the default column
-      selectCount: 0
+      selectedRowKeys: [] // Check here to configure the default column
     };
   },
   components: {
@@ -188,6 +190,133 @@ export default {
       }
 
       this.$emit('tableChange', searchForm);
+    },
+    // 下载一条
+    download(row) {
+      const {
+        drug_name,
+        bar_code,
+        bit_code,
+        simple_code,
+        drug_brand,
+        specifications,
+        dosage_form,
+        packing_unit,
+        approval_number,
+        drug_type,
+        nature_class,
+        use_class,
+        constituents,
+        property,
+        indication,
+        dosage,
+        adverse_reactions,
+        contraindication,
+        attentions,
+        interreaction,
+        depot,
+        manufacturer,
+        address,
+        mainDiseases
+      } = row;
+      let mainDiseaseStr = mainDiseases.join(',');
+      let data = getObjValueArr({
+        drug_name,
+        bar_code,
+        bit_code,
+        simple_code,
+        drug_brand,
+        specifications,
+        dosage_form,
+        packing_unit,
+        approval_number,
+        drug_type,
+        nature_class,
+        use_class,
+        constituents,
+        property,
+        indication,
+        dosage,
+        adverse_reactions,
+        contraindication,
+        attentions,
+        interreaction,
+        depot,
+        manufacturer,
+        address,
+        mainDiseaseStr
+      });
+      downloadToExcel([data], DRUG_DOWNLOAD_HEADER, 'drug_' + drug_name);
+    },
+    // 批量下载
+    downloadAll() {
+      let selectDrugs = [];
+      this.selectedRowKeys.forEach(item => {
+        this.tableList.some(drug => {
+          if (item == drug.id) {
+            selectDrugs.push(drug);
+          }
+        });
+      });
+      let datas = [];
+      selectDrugs.forEach(item => {
+        const {
+          drug_name,
+          bar_code,
+          bit_code,
+          simple_code,
+          drug_brand,
+          specifications,
+          dosage_form,
+          packing_unit,
+          approval_number,
+          drug_type,
+          nature_class,
+          use_class,
+          constituents,
+          property,
+          indication,
+          dosage,
+          adverse_reactions,
+          contraindication,
+          attentions,
+          interreaction,
+          depot,
+          manufacturer,
+          address,
+          mainDiseases
+        } = item;
+        let mainDiseaseStr = mainDiseases.join(',');
+        let data = getObjValueArr({
+          drug_name,
+          bar_code,
+          bit_code,
+          simple_code,
+          drug_brand,
+          specifications,
+          dosage_form,
+          packing_unit,
+          approval_number,
+          drug_type,
+          nature_class,
+          use_class,
+          constituents,
+          property,
+          indication,
+          dosage,
+          adverse_reactions,
+          contraindication,
+          attentions,
+          interreaction,
+          depot,
+          manufacturer,
+          address,
+          mainDiseaseStr
+        });
+        datas.push(data);
+      });
+      console.log(datas);
+      downloadToExcel(datas, DRUG_DOWNLOAD_HEADER, 'drug_批量');
     }
   }
 };

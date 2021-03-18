@@ -37,9 +37,6 @@
           </a-checkbox-group>
         </div>
       </a-collapse-panel>
-      <a-collapse-panel key="2" header="包装单位">
-        <p>{{ text }}</p>
-      </a-collapse-panel>
       <a-collapse-panel key="3" header="用途">
         <p>{{ text }}</p>
       </a-collapse-panel>

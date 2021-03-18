@@ -1,7 +1,11 @@
 <template>
   <div class="detail-container">
     <loading v-if="loading" tip="数据加载中..." size="large" />
-    <h2>{{ drug.drug_name | placeholder }}</h2>
+    <h2>
+      <span>{{ drug.drug_name | placeholder }}</span
+      ><a-icon class="download" type="download" @click="download" />
+    </h2>
+
     <!-- 上部表格 -->
     <div class="top">
       <a-descriptions bordered :column="3">
@@ -41,10 +45,6 @@
         <a-descriptions-item label="商品名">
           {{ drug.drug_brand | placeholder }}
         </a-descriptions-item>
-
-        <!-- <a-descriptions-item label="图片">
-          {{ drug.picture | placeholder }}
-        </a-descriptions-item> -->
       </a-descriptions>
       <div class="picture">
         <img :src="drug.picture" :onerror="defaultImg" />
@@ -102,6 +102,8 @@
 
 <script>
 import { _getDetail } from '@/services/api/drug';
+import { DRUG_DOWNLOAD_HEADER } from '@/utils/constant/drug.js';
+import { downloadToExcel, getObjValueArr } from '@/utils/tool.js';
 export default {
   data() {
     return {
@@ -148,6 +150,62 @@ export default {
       const { data } = await _getDetail({ id: this.$route.query.id });
       this.loading = false;
       this.drug = data;
+    },
+    download() {
+      const {
+        drug_name,
+        bar_code,
+        bit_code,
+        simple_code,
+        drug_brand,
+        specifications,
+        dosage_form,
+        packing_unit,
+        approval_number,
+        drug_type,
+        nature_class,
+        use_class,
+        constituents,
+        property,
+        indication,
+        dosage,
+        adverse_reactions,
+        contraindication,
+        attentions,
+        interreaction,
+        depot,
+        manufacturer,
+        address,
+        mainDiseases
+      } = this.drug;
+      let mainDiseaseStr = mainDiseases.join(',');
+      let data = getObjValueArr({
+        drug_name,
+        bar_code,
+        bit_code,
+        simple_code,
+        drug_brand,
+        specifications,
+        dosage_form,
+        packing_unit,
+        approval_number,
+        drug_type,
+        nature_class,
+        use_class,
+        constituents,
+        property,
+        indication,
+        dosage,
+        adverse_reactions,
+        contraindication,
+        attentions,
+        interreaction,
+        depot,
+        manufacturer,
+        address,
+        mainDiseaseStr
+      });
+      downloadToExcel([data], DRUG_DOWNLOAD_HEADER, 'drug_' + drug_name);
     }
   }
 };
@@ -159,23 +217,36 @@ export default {
   margin: 20px auto;
   padding: 20px 20px;
   background-color: #fff;
+  border-radius: 10px;
   display: flex;
   flex-direction: column;
   align-items: center;
   position: relative;
 
   h2 {
-    display: inline-block;
-    line-height: 40px;
-    border-bottom: 2px solid @theme-color-1;
-    font-size: 20px;
-    color: @theme-color-1;
-    font-weight: 700;
+    width: 100%;
     margin-bottom: 20px;
-    // box-shadow: @box-shadow;
-    padding-left: 10px;
-    padding-right: 10px;
-    border-radius: 4px;
+    font-size: 20px;
+    font-weight: 700;
+    color: @theme-color-1;
+    text-align: center;
+    position: relative;
+    span {
+      display: inline-block;
+      line-height: 40px;
+      border-bottom: 2px solid @theme-color-1;
+      border-radius: 4px;
+    }
+    .download {
+      position: absolute;
+      margin-left: 10px;
+      right: 0;
+      top: 10px;
+      cursor: pointer;
+      &:hover {
+        color: @theme-color;
+      }
+    }
   }
   .ant-descriptions {
     background-color: #fff;

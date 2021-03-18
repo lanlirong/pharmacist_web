@@ -59,6 +59,10 @@ export default {
     },
     search(searchForm) {
       const { searchKey, type } = searchForm;
+      if (searchKey == '') {
+        this.$message.warning('输入不能为空');
+        return;
+      }
       this.searchForm.searchKey = searchKey;
       this.searchForm.type = type;
       this.getList();
