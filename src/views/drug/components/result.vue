@@ -2,7 +2,7 @@
   <div class="drug-result">
     <!-- 结果过滤 -->
     <div class="filter">
-      <result-filter />
+      <result-filter :filterObj="filterObj" @filterChange="filterChange" />
     </div>
     <!--结果列表 -->
     <div class="main">
@@ -125,6 +125,17 @@ export default {
     tableList: {
       type: Array,
       default: () => []
+    },
+    filterObj: {
+      type: Object,
+      default: () => {
+        return {
+          nature_class: [],
+          drug_type: [],
+          use_class: [],
+          manufacturer: []
+        };
+      }
     }
   },
   data() {
@@ -317,6 +328,9 @@ export default {
       });
       console.log(datas);
       downloadToExcel(datas, DRUG_DOWNLOAD_HEADER, 'drug_批量');
+    },
+    filterChange(val) {
+      this.$emit('filterChange', val);
     }
   }
 };

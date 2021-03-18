@@ -31,7 +31,8 @@ import {
   Descriptions,
   AutoComplete,
   PageHeader,
-  Spin
+  Spin,
+  Select
 } from 'ant-design-vue';
 
 Vue.config.productionTip = false;
@@ -59,6 +60,7 @@ Vue.use(Descriptions);
 Vue.use(AutoComplete);
 Vue.use(PageHeader);
 Vue.use(Spin);
+Vue.use(Select);
 
 Vue.prototype.$message = message;
 

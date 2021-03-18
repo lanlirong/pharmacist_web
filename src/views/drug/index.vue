@@ -10,7 +10,9 @@
       :page="page"
       :size="20"
       :tableList="tableList"
+      :filterObj="filterObj"
       @tableChange="tableChange"
+      @filterChange="filterChange"
     />
     <!-- 结果区域 end-->
     <!-- 数据说明区域 start-->
@@ -24,7 +26,7 @@
 import search from './components/search';
 import result from './components/result';
 import introduction from './components/introduction';
-import { _getList } from '@/services/api/drug';
+import { _getList, _getFilterList } from '@/services/api/drug';
 
 export default {
   components: {
@@ -44,8 +46,14 @@ export default {
         page: 1,
         size: 20,
         order: 'asc',
-        orderType: ''
-      }
+        orderType: '',
+        drug_type: [],
+        nature_class: [],
+        use_class: [],
+        manufacturer: []
+      },
+      filterObj: {}
+      // reloadFilter: false
     };
   },
   methods: {
@@ -56,6 +64,11 @@ export default {
       this.total = data.total;
       this.page = data.current_page;
       this.tableList = data.data;
+      this.getFilterList();
+    },
+    async getFilterList() {
+      const { data } = await _getFilterList({ ...this.searchForm });
+      this.filterObj = data;
     },
     search(searchForm) {
       const { searchKey, type } = searchForm;
@@ -63,6 +76,10 @@ export default {
         this.$message.warning('输入不能为空');
         return;
       }
+      this.searchForm.drug_type = [];
+      this.searchForm.nature_class = [];
+      this.searchForm.use_class = [];
+      this.searchForm.manufacturer = [];
       this.searchForm.searchKey = searchKey;
       this.searchForm.type = type;
       this.getList();
@@ -73,6 +90,15 @@ export default {
       this.searchForm.size = size || 20;
       this.searchForm.order = order || 'asc';
       this.searchForm.orderType = orderType || '';
+      this.getList();
+    },
+    // 在结果中筛选
+    filterChange(searchForm) {
+      const { drug_type, nature_class, use_class, manufacturer } = searchForm;
+      this.searchForm.drug_type = drug_type || [];
+      this.searchForm.nature_class = nature_class || [];
+      this.searchForm.use_class = use_class || [];
+      this.searchForm.manufacturer = manufacturer || [];
       this.getList();
     }
   }
