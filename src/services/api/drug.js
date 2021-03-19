@@ -9,3 +9,6 @@ export const _getFilterList = (params = {}) => {
 export const _getDetail = (params = {}) => {
   return axios.get('/api/drug/one', { params });
 };
+export const _getDrugCount = () => {
+  return axios.get('/api/drug/count');
+};

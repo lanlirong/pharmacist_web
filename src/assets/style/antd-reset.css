@@ -8,3 +8,7 @@
     width: 126px;
   }
   
+  /* // input  */
+  .basic-container  .ant-input-lg {
+    font-size: 14px;
+  }

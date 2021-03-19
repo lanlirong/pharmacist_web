@@ -5,6 +5,7 @@
       <div class="input-container">
         <a-input
           size="large"
+          allowClear
           :placeholder="palceText"
           v-model.trim="searchForm.searchKey"
           @pressEnter="search"
@@ -84,9 +85,6 @@ export default {
       .ant-input {
         border: 1px solid @theme-color;
         border-radius: 4px;
-      }
-      .ant-input-lg {
-        font-size: 14px;
       }
     }
     .ant-radio-group {
