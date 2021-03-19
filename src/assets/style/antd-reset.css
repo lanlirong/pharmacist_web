@@ -12,3 +12,7 @@
   .basic-container  .ant-input-lg {
     font-size: 14px;
   }
+  .ant-input {
+    border: 1px solid #15417F;
+    border-radius: 4px;
+  }

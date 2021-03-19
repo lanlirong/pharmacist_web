@@ -38,6 +38,30 @@ const routes = [
     ]
   },
   {
+    path: '/interaction',
+    name: 'Interaction',
+    redirect: '/Interaction/search',
+    component: { render: h => h('router-view', '') },
+    children: [
+      {
+        path: 'search',
+        name: 'InteractionSearch',
+        component: () =>
+          import(
+            /* webpackChunkName: "interaction" */ '../views/interaction/index.vue'
+          )
+      },
+      {
+        path: 'detail',
+        name: 'InteractionDetail',
+        component: () =>
+          import(
+            /* webpackChunkName: "interaction" */ '../views/interaction/detail.vue'
+          )
+      }
+    ]
+  },
+  {
     path: '/error',
     name: '/error',
     component: () =>

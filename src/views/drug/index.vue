@@ -77,7 +77,7 @@ export default {
         const { data } = await _getList({ ...this.searchForm });
         this.tableLoading = false;
         this.total = data.total;
-        this.page = data.current_page;
+        this.searchForm.page = data.current_page;
         this.tableList = data.data;
         this.getFilterList();
       } catch (error) {
@@ -104,6 +104,7 @@ export default {
         use_class: [],
         manufacturer: []
       };
+      this.searchForm.page = 1;
       this.searchForm.searchKey = searchKey;
       this.searchForm.type = type;
       this.getList();

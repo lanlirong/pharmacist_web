@@ -1,5 +1,7 @@
 <template>
   <div class="search-container">
+    <h1>药品检索</h1>
+
     <!-- 基本搜索框 -->
     <div class="basic-container">
       <div class="input-container">
@@ -70,6 +72,11 @@ export default {
   background-color: #fff;
   padding: 20px 0;
   position: sticky;
+  h1 {
+    font-size: 20px;
+    margin: 10px 0;
+    font-weight: 700;
+  }
   .basic-container {
     width: 60%;
     max-width: 1200px;

@@ -304,7 +304,6 @@ export default {
         });
         datas.push(data);
       });
-      console.log(datas);
       downloadToExcel(datas, DRUG_DOWNLOAD_HEADER, 'drug_批量');
     }
   }

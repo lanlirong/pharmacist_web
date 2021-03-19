@@ -9,6 +9,7 @@
     "eslint-fix": "eslint --fix --ext .js --ext .jsx --ext .vue src/ "
   },
   "dependencies": {
+    "@antv/g6": "^4.2.1",
     "ant-design-vue": "^1.7.4",
     "axios": "^0.21.1",
     "core-js": "^3.9.1",
