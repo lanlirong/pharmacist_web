@@ -1,103 +1,95 @@
 <template>
   <div class="drug-result">
-    <!-- 结果过滤 -->
-    <div class="filter">
-      <result-filter :filterObj="filterObj" @filterChange="filterChange" />
+    <div class="download">
+      您已选择<span>{{ selectedRowKeys.length }}</span
+      >条数据
+      <a-button size="small" type="link" @click="downloadAll">
+        <a-icon type="download" />下载
+      </a-button>
+      <span class="total-text">共查询到{{ total }}条数据</span>
     </div>
-    <!--结果列表 -->
-    <div class="main">
-      <div class="download">
-        您已选择<span>{{ selectedRowKeys.length }}</span
-        >条数据
-        <a-button size="small" type="link" @click="downloadAll">
-          <a-icon type="download" />下载
-        </a-button>
-        <span class="total-text">共查询到{{ total }}条数据</span>
-      </div>
-      <div class="list">
-        <a-table
-          :data-source="tableList"
-          :loading="tableLoading"
-          :rowKey="row => row.id"
-          :row-selection="{
-            selectedRowKeys: selectedRowKeys,
-            onChange: onSelectChange
-          }"
-          :pagination="pagination"
-          @change="handleTableChange"
+    <div class="list">
+      <a-table
+        :data-source="tableList"
+        :loading="tableLoading"
+        :rowKey="row => row.id"
+        :row-selection="{
+          selectedRowKeys: selectedRowKeys,
+          onChange: onSelectChange
+        }"
+        :pagination="pagination"
+        @change="handleTableChange"
+      >
+        <a-table-column
+          title="药品名称"
+          key="drug_name"
+          :width="130"
+          :sorter="true"
+          :ellipsis="true"
+          ><template slot-scope="{ drug_name, id }">
+            <router-link :to="`/drug/detail?id=${id}`" target="_blank">{{
+              drug_name | placeholder
+            }}</router-link>
+          </template></a-table-column
         >
-          <a-table-column
-            title="药品名称"
-            key="drug_name"
-            :width="130"
-            :sorter="true"
-            :ellipsis="true"
-            ><template slot-scope="{ drug_name, id }">
-              <router-link :to="`/drug/detail?id=${id}`" target="_blank">{{
-                drug_name | placeholder
-              }}</router-link>
-            </template></a-table-column
-          >
-          <a-table-column
-            title="商品名"
-            data-index="drug_brand"
-            key="drug_brand"
-            :width="100"
-            :sorter="true"
-            :ellipsis="true"
-            ><template slot-scope="drug_brand">{{
-              drug_brand | placeholder
-            }}</template></a-table-column
-          >
-          <a-table-column
-            title="批准文号"
-            data-index="approval_number"
-            key="approval_number"
-            :width="180"
-            :sorter="true"
-            :ellipsis="true"
-            ><template slot-scope="approval_number">{{
-              approval_number | placeholder
-            }}</template></a-table-column
-          >
-          <a-table-column
-            title="性质分类"
-            data-index="nature_class"
-            key="nature_class"
-            :width="100"
-            ><div slot-scope="nature_class">
-              <a-tag :color="nature_tag_color(nature_class)">
-                {{ nature_class | placeholder }}
-              </a-tag>
-            </div></a-table-column
-          >
-          <a-table-column
-            title="主要成分"
-            data-index="constituents"
-            key="constituents"
-            :ellipsis="true"
-            ><template slot-scope="constituents">{{
-              constituents | placeholder
-            }}</template></a-table-column
-          >
-          <a-table-column :width="110" key="action">
-            <template slot-scope="row">
-              <router-link :to="`/drug/detail?id=${row.id}`" target="_blank">
-                <a-tooltip placement="top" title="详情"
-                  ><a-button type="link"><a-icon type="file-text"/></a-button
-                ></a-tooltip>
-              </router-link>
-              <a-tooltip placement="top" title="下载"
-                ><a-button type="link" @click="download(row)"
-                  ><a-icon type="download"/></a-button></a-tooltip></template
-          ></a-table-column>
-        </a-table>
-      </div>
+        <a-table-column
+          title="商品名"
+          data-index="drug_brand"
+          key="drug_brand"
+          :width="100"
+          :sorter="true"
+          :ellipsis="true"
+          ><template slot-scope="drug_brand">{{
+            drug_brand | placeholder
+          }}</template></a-table-column
+        >
+        <a-table-column
+          title="批准文号"
+          data-index="approval_number"
+          key="approval_number"
+          :width="180"
+          :sorter="true"
+          :ellipsis="true"
+          ><template slot-scope="approval_number">{{
+            approval_number | placeholder
+          }}</template></a-table-column
+        >
+        <a-table-column
+          title="性质分类"
+          data-index="nature_class"
+          key="nature_class"
+          :width="100"
+          ><div slot-scope="nature_class">
+            <a-tag :color="nature_tag_color(nature_class)">
+              {{ nature_class | placeholder }}
+            </a-tag>
+          </div></a-table-column
+        >
+        <a-table-column
+          title="主要成分"
+          data-index="constituents"
+          key="constituents"
+          :ellipsis="true"
+          ><template slot-scope="constituents">{{
+            constituents | placeholder
+          }}</template></a-table-column
+        >
+        <a-table-column :width="110" key="action">
+          <template slot-scope="row">
+            <router-link :to="`/drug/detail?id=${row.id}`" target="_blank">
+              <a-tooltip placement="top" title="详情"
+                ><a-button type="link"><a-icon type="file-text"/></a-button
+              ></a-tooltip>
+            </router-link>
+            <a-tooltip placement="top" title="下载"
+              ><a-button type="link" @click="download(row)"
+                ><a-icon type="download"/></a-button></a-tooltip></template
+        ></a-table-column>
+      </a-table>
     </div>
   </div>
 </template>
 <script>
-import resultFilter from './result-filter';
 import {
   DRUG_NATURE_CLASS,
   DRUG_DOWNLOAD_HEADER
@@ -125,26 +117,12 @@ export default {
     tableList: {
       type: Array,
       default: () => []
-    },
-    filterObj: {
-      type: Object,
-      default: () => {
-        return {
-          nature_class: [],
-          drug_type: [],
-          use_class: [],
-          manufacturer: []
-        };
-      }
     }
   },
   data() {
     return {
       selectedRowKeys: [] // Check here to configure the default column
     };
-  },
-  components: {
-    resultFilter
   },
   computed: {
     pagination() {
@@ -171,7 +149,6 @@ export default {
   mounted() {},
   methods: {
     onSelectChange(selectedRowKeys) {
-      console.log('selectedRowKeys changed: ', selectedRowKeys);
       this.selectedRowKeys = selectedRowKeys;
     },
     handleTableChange(pagination, filters, sorter) {
@@ -329,9 +306,6 @@ export default {
       });
       console.log(datas);
       downloadToExcel(datas, DRUG_DOWNLOAD_HEADER, 'drug_批量');
-    },
-    filterChange(val) {
-      this.$emit('filterChange', val);
     }
   }
 };
@@ -339,52 +313,42 @@ export default {
 
 <style lang="less" scoped>
 .drug-result {
-  width: 1200px;
+  flex: 1;
   display: flex;
-  margin: 0 auto;
-  margin-top: 20px;
-  .filter {
-    width: 250px;
-    margin-right: 20px;
-  }
-  .main {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    border: @border;
-    background-color: #fff;
-    padding: 20px;
-    box-shadow: @box-shadow;
+  flex-direction: column;
+  border: @border;
+  background-color: #fff;
+  padding: 20px;
+  box-shadow: @box-shadow;
 
-    .download {
-      height: 40px;
-      line-height: 40px;
-      padding: 0 20px;
-      background-color: #f7f8fc;
-      border: @border;
-      span {
-        color: @theme-color;
-        padding: 0 5px;
-      }
-      button {
-        .anticon {
-          margin-right: -8px;
-        }
-      }
-      .total-text {
-        float: right;
+  .download {
+    height: 40px;
+    line-height: 40px;
+    padding: 0 20px;
+    background-color: #f7f8fc;
+    border: @border;
+    span {
+      color: @theme-color;
+      padding: 0 5px;
+    }
+    button {
+      .anticon {
+        margin-right: -8px;
       }
     }
-    .list {
-      flex: 1;
-      .ant-btn {
-        padding: 0 10px;
-      }
-      a {
-        color: @text-link;
-        &:hover {
-          text-decoration: underline;
-        }
+    .total-text {
+      float: right;
+    }
+  }
+  .list {
+    flex: 1;
+    .ant-btn {
+      padding: 0 10px;
+    }
+    a {
+      color: @text-link;
+      &:hover {
+        text-decoration: underline;
       }
     }
   }

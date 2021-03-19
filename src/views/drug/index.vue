@@ -3,18 +3,25 @@
     <!-- 搜索区域 start-->
     <search @search="search" />
     <!-- 搜索区域 end-->
-    <!-- 结果区域 start-->
-    <result
-      :tableLoading="tableLoading"
-      :total="total"
-      :page="searchForm.page"
-      :size="20"
-      :tableList="tableList"
-      :filterObj="filterObj"
-      @tableChange="tableChange"
-      @filterChange="filterChange"
-    />
-    <!-- 结果区域 end-->
+    <div class="main-container">
+      <!-- 结果过滤 start -->
+      <result-filter
+        :filterObj="filterObj"
+        :defaultFilter="defaultFilter"
+        @filterChange="filterChange"
+      />
+      <!-- 结果过滤 end -->
+      <!-- 结果区域 start-->
+      <result
+        :tableLoading="tableLoading"
+        :total="total"
+        :page="searchForm.page"
+        :size="20"
+        :tableList="tableList"
+        @tableChange="tableChange"
+      />
+      <!-- 结果区域 end-->
+    </div>
     <!-- 数据说明区域 start-->
     <introduction />
     <!-- 数据说明区域 end-->
@@ -25,6 +32,7 @@
 <script>
 import search from './components/search';
 import result from './components/result';
+import resultFilter from './components/result-filter';
 import introduction from './components/introduction';
 import { _getList, _getFilterList } from '@/services/api/drug';
 
@@ -32,6 +40,7 @@ export default {
   components: {
     search,
     result,
+    resultFilter,
     introduction
   },
   data() {
@@ -52,7 +61,13 @@ export default {
         use_class: [],
         manufacturer: []
       },
-      filterObj: {}
+      filterObj: {},
+      defaultFilter: {
+        drug_type: [],
+        nature_class: [],
+        use_class: [],
+        manufacturer: []
+      }
     };
   },
   methods: {
@@ -83,6 +98,12 @@ export default {
       this.searchForm.nature_class = [];
       this.searchForm.use_class = [];
       this.searchForm.manufacturer = [];
+      this.defaultFilter = {
+        drug_type: [],
+        nature_class: [],
+        use_class: [],
+        manufacturer: []
+      };
       this.searchForm.searchKey = searchKey;
       this.searchForm.type = type;
       this.getList();
@@ -114,5 +135,18 @@ export default {
   min-width: 1200px;
   margin: 0 auto;
   //   padding: 0 20px 40px;
+  .main-container {
+    width: 1200px;
+    display: flex;
+    margin: 0 auto;
+    margin-top: 20px;
+    .result-filter {
+      width: 250px;
+      margin-right: 20px;
+    }
+    .drug-result {
+      flex: 1;
+    }
+  }
 }
 </style>
