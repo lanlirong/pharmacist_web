@@ -36,7 +36,7 @@
               :to="`/interaction/detail?name=${name}`"
               target="_blank"
             >
-              <a-button type="link">关系详情</a-button>
+              <a-button type="link">作用详情</a-button>
             </router-link>
           </template></a-table-column
         >
