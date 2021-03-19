@@ -147,9 +147,13 @@ export default {
   methods: {
     async getDetail() {
       this.loading = true;
-      const { data } = await _getDetail({ id: this.$route.query.id });
-      this.loading = false;
-      this.drug = data;
+      try {
+        const { data } = await _getDetail({ id: this.$route.query.id });
+        this.drug = data;
+        this.loading = false;
+      } catch (error) {
+        this.loading = false;
+      }
     },
     download() {
       const {

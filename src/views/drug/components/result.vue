@@ -152,7 +152,8 @@ export default {
         total: this.total,
         showTotal: (total, range) =>
           `第${range[0]}-${range[1]}条 / 共${total}条 `,
-        pageSize: this.size
+        pageSize: this.size,
+        current: this.page
       };
     },
     nature_tag_color() {

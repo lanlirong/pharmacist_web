@@ -7,7 +7,7 @@
     <result
       :tableLoading="tableLoading"
       :total="total"
-      :page="page"
+      :page="searchForm.page"
       :size="20"
       :tableList="tableList"
       :filterObj="filterObj"
@@ -38,7 +38,7 @@ export default {
     return {
       tableLoading: false,
       total: 0,
-      page: 1,
+      // page: 1,
       tableList: [],
       searchForm: {
         searchKey: '',
@@ -53,18 +53,21 @@ export default {
         manufacturer: []
       },
       filterObj: {}
-      // reloadFilter: false
     };
   },
   methods: {
     async getList() {
       this.tableLoading = true;
-      const { data } = await _getList({ ...this.searchForm });
-      this.tableLoading = false;
-      this.total = data.total;
-      this.page = data.current_page;
-      this.tableList = data.data;
-      this.getFilterList();
+      try {
+        const { data } = await _getList({ ...this.searchForm });
+        this.tableLoading = false;
+        this.total = data.total;
+        this.page = data.current_page;
+        this.tableList = data.data;
+        this.getFilterList();
+      } catch (error) {
+        this.tableLoading = false;
+      }
     },
     async getFilterList() {
       const { data } = await _getFilterList({ ...this.searchForm });
@@ -99,6 +102,7 @@ export default {
       this.searchForm.nature_class = nature_class || [];
       this.searchForm.use_class = use_class || [];
       this.searchForm.manufacturer = manufacturer || [];
+      this.searchForm.page = 1;
       this.getList();
     }
   }

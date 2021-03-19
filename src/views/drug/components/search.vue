@@ -33,11 +33,11 @@ export default {
   data() {
     return {
       searchForm: {
-        searchKey: '三七丹参胶囊',
+        searchKey: '三七',
         type: 0
       },
       radioArr: DRUG_TYPE_ARR,
-      palceText: '请输入药品名，例如三七丹参胶囊'
+      palceText: '请输入药品名，例如三七'
     };
   },
   mounted() {},

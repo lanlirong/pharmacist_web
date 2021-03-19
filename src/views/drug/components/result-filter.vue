@@ -9,7 +9,7 @@
     </div>
     <a-collapse>
       <a-collapse-panel key="1" header="是否处方药">
-        <a-checkbox-group @change="changeType">
+        <a-checkbox-group :value="selectFilter.drug_type" @change="changeType">
           <a-checkbox
             v-for="(item, index) in filterObj.drug_type"
             :key="index"
@@ -20,7 +20,10 @@
         </a-checkbox-group>
       </a-collapse-panel>
       <a-collapse-panel key="2" header="性质分类">
-        <a-checkbox-group @change="changeNature">
+        <a-checkbox-group
+          :value="selectFilter.nature_class"
+          @change="changeNature"
+        >
           <a-checkbox
             v-for="(item, index) in filterObj.nature_class"
             :key="index"
@@ -32,7 +35,7 @@
       </a-collapse-panel>
 
       <a-collapse-panel key="3" header="用途">
-        <a-checkbox-group @change="changeUse">
+        <a-checkbox-group :value="selectFilter.use_class" @change="changeUse">
           <a-checkbox
             v-for="(item, index) in filterObj.use_class"
             :key="index"
@@ -47,6 +50,7 @@
           mode="multiple"
           style="width: 100%;"
           placeholder="Please select"
+          :value="selectFilter.manufacturer"
           :dropdownMatchSelectWidth="false"
           @change="changeManu"
         >
@@ -89,6 +93,7 @@ export default {
       }
     };
   },
+
   methods: {
     changeType(checkedValues) {
       this.selectFilter.drug_type = checkedValues;
@@ -100,7 +105,6 @@ export default {
       this.selectFilter.use_class = checkedValues;
     },
     changeManu(checkedValues) {
-      console.log(checkedValues);
       this.selectFilter.manufacturer = checkedValues;
     },
     filterChange() {
@@ -108,8 +112,8 @@ export default {
     },
     removeFilter() {
       this.selectFilter = {
-        drug_type: [],
         nature_class: [],
+        drug_type: [],
         use_class: [],
         manufacturer: []
       };
