@@ -15,7 +15,9 @@ export default {
     }
   },
   data() {
-    return {};
+    return {
+      lastSelectNode: null
+    };
   },
   mounted() {
     this.graphInit();
@@ -29,9 +31,16 @@ export default {
         container: 'container',
         width,
         height: this.height,
-        fitViewPadding: [20, 20, 20, 20],
+        fitCenter: true,
+        // fitViewPadding: [20, 20, 20, 20],
         modes: {
-          default: ['drag-canvas']
+          default: [
+            'drag-canvas',
+            {
+              type: 'click-select',
+              multiple: false
+            }
+          ]
         },
         defaultEdge: {
           type: 'cubic-horizontal'
@@ -97,14 +106,24 @@ export default {
           },
           // configurations for state icon
           stateIcon: {
-            show: false
+            show: false,
+            width: 10,
+            height: 10,
+            // adjust hte offset along x-axis for the icon
+            offset: -5
           }
         },
         nodeStateStyles: {
           hover: {
             lineWidth: 0.5,
             stroke: '#15417F',
-            fill: '#e6f7ff'
+            fill: '#E5E8EE'
+          },
+          selected: {
+            lineWidth: 0.5,
+            stroke: '#15417F',
+            fill: '#e6f7ff',
+            size: [300, 100]
           }
         },
         layout: {
@@ -120,7 +139,7 @@ export default {
         if (node.id == 'id0') {
           return {
             id: 'circle',
-            x: -100,
+            x: -150,
             type: 'circle',
             size: [20, 20],
             labelCfg: {
@@ -153,32 +172,28 @@ export default {
         const { item } = evt;
         graph.setItemState(item, 'hover', false);
       });
+      // 设置选中图标
+      graph.on('nodeselectchange', e => {
+        // 清除上一选中样式
+        if (this.lastSelectNode)
+          graph.updateItem(this.lastSelectNode, {
+            stateIcon: {
+              show: false
+            }
+          });
+        if (e.select) {
+          graph.updateItem(e.target, {
+            stateIcon: {
+              show: true
+            }
+          });
+        }
+        this.lastSelectNode = e.target;
+      });
+      // 点击展示右侧信息
       graph.on('node:click', evt => {
         const { item } = evt;
-        if (item._cfg.model.id !== 'circle') {
-          const {
-            name,
-            interaction,
-            result,
-            suggest,
-            evidence,
-            level,
-            reference1,
-            reference2,
-            reference3,
-            reference4,
-            reference5
-          } = item._cfg.model;
-          let data = { name, interaction, result, suggest, evidence, level };
-          data.references = [
-            reference1,
-            reference2,
-            reference3,
-            reference4,
-            reference5
-          ];
-          this.$emit('clickNode', data);
-        }
+        this.getSelectData(item);
       });
 
       if (typeof window !== 'undefined')
@@ -188,6 +203,32 @@ export default {
             return;
           graph.changeSize(container.scrollWidth, container.scrollHeight);
         };
+    },
+    getSelectData(item) {
+      if (item._cfg.model.id !== 'circle') {
+        const {
+          name,
+          interaction,
+          result,
+          suggest,
+          evidence,
+          level,
+          reference1,
+          reference2,
+          reference3,
+          reference4,
+          reference5
+        } = item._cfg.model;
+        let data = { name, interaction, result, suggest, evidence, level };
+        data.references = [
+          reference1,
+          reference2,
+          reference3,
+          reference4,
+          reference5
+        ];
+        this.$emit('clickNode', data);
+      }
     }
   }
 };

@@ -21,7 +21,7 @@ export default {
   data() {
     return {
       searchForm: {
-        searchKey: '阿'
+        searchKey: '阿利维A酸'
       }
     };
   },

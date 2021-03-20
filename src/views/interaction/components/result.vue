@@ -11,14 +11,16 @@
         :pagination="pagination"
       >
         <a-table-column
-          title="药品名称"
+          title="药物名称"
           key="name"
           :width="200"
           :ellipsis="true"
           ><template slot-scope="{ name }">
-            <router-link :to="`/drug/detail?name=${name}`" target="_blank">{{
-              name | placeholder
-            }}</router-link>
+            <router-link
+              :to="`/interaction/detail?name=${name}`"
+              target="_blank"
+              >{{ name | placeholder }}</router-link
+            >
           </template></a-table-column
         >
         <a-table-column

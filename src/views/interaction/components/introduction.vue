@@ -4,17 +4,18 @@
       <li>
         <h2>功能介绍</h2>
         <div class="des">
-          <p>检索药品的基本信息、包装图片和主治疾病。</p>
-          <p>提供多种检索方式，可在结果中按条件过滤，可对部分字段排序查看。</p>
-          <p>可单条或者批量下载成excel格式数据。</p>
+          <p>可视化展示药物有效成分之间的相互作用关系。</p>
+          <p>
+            输入药物名称，获得相互作用结果汇总，进入详情页后展示相互作用关系图，点击图上的卡片获得单条作用信息。
+          </p>
         </div>
       </li>
       <li>
         <h2>数据说明</h2>
         <div class="des">
-          <p>药品数据库目前累记收录{{ count }}条数据。</p>
+          <p>药物相互作用数据库目前累记收录{{ count }}条数据。</p>
           <p>
-            数据包括药品各种名称字段、各种编码字段、药品说明书相关字段以及主治疾病字段在内的23个字段,绝大部分药品收录图片，图片累计约45000余张
+            数据包括药物与相互作用物质的相互作用结果，临床建议，部分数据提供临床证据、证据等级和参考文献。
           </p>
         </div>
       </li>
@@ -31,7 +32,7 @@
   </div>
 </template>
 <script>
-import { _getDrugCount } from '@/services/api/drug';
+import { _getInteractionCount } from '@/services/api/interaction';
 export default {
   data() {
     return {
@@ -39,11 +40,11 @@ export default {
     };
   },
   mounted() {
-    this.getDrugCount();
+    this.getInteractionCount();
   },
   methods: {
-    async getDrugCount() {
-      const { data } = await _getDrugCount();
+    async getInteractionCount() {
+      const { data } = await _getInteractionCount();
       this.count = data;
     }
   }

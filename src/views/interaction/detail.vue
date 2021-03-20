@@ -15,7 +15,7 @@
       </div>
     </div>
     <div class="right">
-      <h2>详情<span>(点击方框查看)</span></h2>
+      <h2>详情<span>(点击左侧卡片查看)</span></h2>
       <!-- 详情 -->
       <div class="info-container">
         <detail-card v-if="Object.keys(cardData).length > 0" :data="cardData" />
@@ -52,6 +52,7 @@ export default {
         const { data } = await _getOne({ name: this.$route.query.name });
         this.graphData = this.handleData(data);
         this.height = data.length * 120;
+
         this.graphLoading = false;
       } catch (error) {
         this.graphLoading = false;
@@ -67,9 +68,9 @@ export default {
         let temp = { ...item };
         temp.id = item.id;
         if (item.interaction.length > 16)
-          item.interaction = item.interaction.substr(0, 16) + '...';
+          item.interaction = item.interaction.substr(0, 18) + '...';
         if (item.result.length > 16)
-          item.result = item.result.substr(0, 20) + '...';
+          item.result = item.result.substr(0, 22) + '...';
         temp.label = item.interaction;
         temp.description = item.result;
         children.push(temp);

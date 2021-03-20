@@ -6,3 +6,6 @@ export const _getList = (params = {}) => {
 export const _getOne = (params = {}) => {
   return axios.get('/api/interaction/one', { params });
 };
+export const _getInteractionCount = () => {
+  return axios.get('/api/interaction/count');
+};

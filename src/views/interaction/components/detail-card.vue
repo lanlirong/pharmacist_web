@@ -16,7 +16,8 @@
             {{ data.evidence | placeholder }}
           </a-descriptions-item>
           <a-descriptions-item label="证据级别">
-            <a-tag color="red"> {{ data.level | placeholder }}</a-tag>
+            <a-tag v-if="data.level" color="red"> {{ data.level }}</a-tag>
+            <span v-else>---</span>
           </a-descriptions-item>
         </a-descriptions>
       </li>
