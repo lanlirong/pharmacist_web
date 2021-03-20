@@ -122,7 +122,6 @@ export default {
             id: 'circle',
             x: -100,
             type: 'circle',
-            // label: this.graphData.label,
             size: [20, 20],
             labelCfg: {
               position: 'bottom',
@@ -153,6 +152,33 @@ export default {
       graph.on('node:mouseleave', evt => {
         const { item } = evt;
         graph.setItemState(item, 'hover', false);
+      });
+      graph.on('node:click', evt => {
+        const { item } = evt;
+        if (item._cfg.model.id !== 'circle') {
+          const {
+            name,
+            interaction,
+            result,
+            suggest,
+            evidence,
+            level,
+            reference1,
+            reference2,
+            reference3,
+            reference4,
+            reference5
+          } = item._cfg.model;
+          let data = { name, interaction, result, suggest, evidence, level };
+          data.references = [
+            reference1,
+            reference2,
+            reference3,
+            reference4,
+            reference5
+          ];
+          this.$emit('clickNode', data);
+        }
       });
 
       if (typeof window !== 'undefined')

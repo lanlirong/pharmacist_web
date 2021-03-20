@@ -1,23 +1,25 @@
 <template>
   <div class="detail">
     <div class="left">
-      <h2>相互作用关系概览</h2>
+      <h2>相互作用关系概览——{{ graphData.label }}</h2>
       <!-- 关系图 -->
       <!-- :style="{ height: height + 40 + 'px' }" -->
       <div class="graph-container">
         <loading v-if="graphLoading" tip="数据加载中..." />
-        <graph v-if="graphData.id" :height="height" :graphData="graphData" />
+        <graph
+          v-if="graphData.id"
+          :height="height"
+          :graphData="graphData"
+          @clickNode="clickNode"
+        />
       </div>
     </div>
     <div class="right">
       <h2>详情<span>(点击方框查看)</span></h2>
       <!-- 详情 -->
       <div class="info-container">
-        <ul>
-          <li>1</li>
-          <li>2</li>
-          <li>3</li>
-        </ul>
+        <detail-card v-if="Object.keys(cardData).length > 0" :data="cardData" />
+        <a-empty v-else />
       </div>
     </div>
   </div>
@@ -25,16 +27,19 @@
 
 <script>
 import graph from './components/graph';
+import detailCard from './components/detail-card';
 import { _getOne } from '@/services/api/interaction';
 export default {
   components: {
-    graph
+    graph,
+    detailCard
   },
   data() {
     return {
       graphLoading: false,
       height: 500,
-      graphData: {}
+      graphData: {},
+      cardData: {}
     };
   },
   mounted() {
@@ -59,7 +64,7 @@ export default {
       };
       let children = [];
       data.forEach(item => {
-        let temp = {};
+        let temp = { ...item };
         temp.id = item.id;
         if (item.interaction.length > 16)
           item.interaction = item.interaction.substr(0, 16) + '...';
@@ -71,6 +76,12 @@ export default {
       });
       node.children = children;
       return node;
+    },
+    clickNode(data) {
+      data.references = data.references.filter(item => {
+        return item !== '';
+      });
+      this.cardData = data;
     }
   }
 };
@@ -81,7 +92,6 @@ export default {
   width: 1200px;
   display: flex;
   justify-content: center;
-  //   align-items: center;
   margin: 20px auto;
   h2 {
     font-size: 16px;
@@ -97,14 +107,11 @@ export default {
   }
   .left {
     width: 800px;
-    height: calc(100vh - 100px);
-
+    // margin-right: 400px;
     .graph-container {
       background-color: #fff;
       width: 800px;
       min-height: 500px;
-      height: 100%;
-      overflow: hidden;
       padding: 20px;
       position: relative;
       border: @border;
@@ -114,16 +121,19 @@ export default {
   .right {
     flex: 1;
     margin-left: 20px;
-
+    height: calc(100vh - 60px);
+    position: sticky;
+    top: 0;
     .info-container {
-      li {
-        margin-bottom: 20px;
-        border-radius: 8px;
-        background-color: #fff;
-        height: 100px;
-        padding: 10px;
-        box-shadow: @box-shadow;
-        border: @border;
+      height: 100%;
+      overflow: scroll;
+      padding-bottom: 20px;
+
+      .ant-empty {
+        height: 400px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
       }
     }
   }
