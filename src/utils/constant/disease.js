@@ -9,3 +9,4 @@ export const DISEASE_DOWNLOAD_HEADER = [
   '治愈率',
   '常用药物'
 ];
+export const RATE_COLOR = ['green', 'orange', 'red'];

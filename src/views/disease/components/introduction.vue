@@ -4,18 +4,19 @@
       <li>
         <h2>功能介绍</h2>
         <div class="des">
-          <p>可视化展示药物有效成分之间的相互作用关系。</p>
+          <p>常见疾病的基本信息以及常用治疗药物检索</p>
           <p>
-            输入药物名称，获得相互作用结果汇总，进入详情页后展示相互作用关系图，点击图上的卡片获得单条作用信息。
+            输入疾病名称，结果可按疾病名称首字母排序，点击详情查看详细信息。
           </p>
+          <p>可单条或者批量下载成excel格式数据。</p>
         </div>
       </li>
       <li>
         <h2>数据说明</h2>
         <div class="des">
-          <p>药物相互作用数据库目前累记收录{{ count }}条数据。</p>
+          <p>疾病数据库目前累记收录{{ count }}条数据。</p>
           <p>
-            数据包括药物与相互作用物质的相互作用结果，临床建议，部分数据提供临床证据、证据等级和参考文献。
+            数据包括疾病名称、疾病简介、发病人群、传染性、并发症、治疗方式、治疗周期、治愈率字段，以及常用治疗药物。
           </p>
         </div>
       </li>
@@ -32,7 +33,7 @@
   </div>
 </template>
 <script>
-import { _getInteractionCount } from '@/services/api/interaction';
+import { _getDiseaseCount } from '@/services/api/disease';
 export default {
   data() {
     return {
@@ -40,11 +41,11 @@ export default {
     };
   },
   mounted() {
-    this.getInteractionCount();
+    this.getDiseaseCount();
   },
   methods: {
-    async getInteractionCount() {
-      const { data } = await _getInteractionCount();
+    async getDiseaseCount() {
+      const { data } = await _getDiseaseCount();
       this.count = data;
     }
   }

@@ -69,9 +69,9 @@
           :width="80"
           :ellipsis="true"
           ><div slot-scope="rate">
-            <a-tag>
-              {{ rate | placeholder }}
-            </a-tag>
+            <a-tag v-if="rate" :color="rate_tag_color(rate)">
+              {{ rate | ellipsisRate }} </a-tag
+            ><span v-else>---</span>
           </div></a-table-column
         >
         <a-table-column :width="110" key="action">
@@ -90,7 +90,10 @@
   </div>
 </template>
 <script>
-import { DISEASE_DOWNLOAD_HEADER } from '@/utils/constant/disease.js';
+import {
+  DISEASE_DOWNLOAD_HEADER,
+  RATE_COLOR
+} from '@/utils/constant/disease.js';
 import { downloadToExcel, getObjValueArr } from '@/utils/tool.js';
 
 export default {
@@ -130,6 +133,25 @@ export default {
         pageSize: this.size,
         current: this.page
       };
+    },
+    rate_tag_color() {
+      return function(params) {
+        // eslint-disable-next-line use-isnan
+        if (
+          params.indexOf('%') == -1 ||
+          isNaN(parseFloat(params.split('%')[0]))
+        )
+          return '';
+        if (params > '80%') return RATE_COLOR[0];
+        if (params > '50%') return RATE_COLOR[1];
+        return RATE_COLOR[2];
+      };
+    }
+  },
+  filters: {
+    ellipsisRate: function(params) {
+      if (params.length > 6) return params.substr(0, 6) + '...';
+      return params;
     }
   },
   mounted() {},
