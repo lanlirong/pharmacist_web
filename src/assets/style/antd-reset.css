@@ -1,26 +1,55 @@
 /* description */
 .ant-descriptions-bordered .ant-descriptions-item-label,
-  .ant-descriptions-bordered .ant-descriptions-item-content {
-    max-width: 400px;
-    vertical-align: middle;
-  }
-  .middle  .ant-descriptions-item-colon {
-    width: 126px;
-  }
-  #main > div > div.right > div > div > ul > li:nth-child(1) > div > div.ant-descriptions-view > table > tbody > tr:nth-child(3) > td > span.ant-descriptions-item-content,#main > div > div.right > div > div > ul > li:nth-child(1) > div > div.ant-descriptions-view > table > tbody > tr:nth-child(2) > td > span.ant-descriptions-item-content {
-    text-indent: 28px;
-    display: block;
-  }
-  .detail .detail-card  .ant-descriptions-item-colon {
-    font-weight: 700;
-  }
-  
-  /* // input  */
-  .basic-container  .ant-input-lg {
-    font-size: 14px;
-  }
-  .ant-input {
-    border: 1px solid #15417F;
-    border-radius: 4px;
-  }
+.ant-descriptions-bordered .ant-descriptions-item-content {
+  max-width: 400px;
+  vertical-align: middle;
+}
+.middle .ant-descriptions-item-colon {
+  width: 126px;
+}
+.disease .bottom .ant-descriptions-item-colon {
+  width: 126px;
+}
+#main
+  > div
+  > div.right
+  > div
+  > div
+  > ul
+  > li:nth-child(1)
+  > div
+  > div.ant-descriptions-view
+  > table
+  > tbody
+  > tr:nth-child(3)
+  > td
+  > span.ant-descriptions-item-content,
+#main
+  > div
+  > div.right
+  > div
+  > div
+  > ul
+  > li:nth-child(1)
+  > div
+  > div.ant-descriptions-view
+  > table
+  > tbody
+  > tr:nth-child(2)
+  > td
+  > span.ant-descriptions-item-content {
+  text-indent: 28px;
+  display: block;
+}
+.detail .detail-card .ant-descriptions-item-colon {
+  font-weight: 700;
+}
 
+/* // input  */
+.basic-container .ant-input-lg {
+  font-size: 14px;
+}
+.ant-input {
+  border: 1px solid #15417f;
+  border-radius: 4px;
+}

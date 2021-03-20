@@ -43,7 +43,7 @@
         <p class="item-title">科普宣教</p>
         <p class="item-des">药学相关信息的科普文章</p>
       </li>
-      <li @click="toSearch('calendar')">
+      <!-- <li @click="toSearch('calendar')">
         <div class="item-img"><svg-icon iconClass="calendar"></svg-icon></div>
         <p class="item-title">药历构建</p>
         <p class="item-des">为特殊患者建立药历，可用于慢病管理</p>
@@ -54,7 +54,7 @@
         </div>
         <p class="item-title">不良反应共建</p>
         <p class="item-des">发布药物不良反应案例，共建不良反应信息库</p>
-      </li>
+      </li> -->
       <li @click="toSearch('community')">
         <div class="item-img"><svg-icon iconClass="community"></svg-icon></div>
         <p class="item-title">药师社区</p>

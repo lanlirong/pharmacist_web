@@ -40,7 +40,7 @@ const routes = [
   {
     path: '/interaction',
     name: 'Interaction',
-    redirect: '/Interaction/search',
+    redirect: '/interaction/search',
     component: { render: h => h('router-view', '') },
     children: [
       {
@@ -57,6 +57,28 @@ const routes = [
         component: () =>
           import(
             /* webpackChunkName: "interaction" */ '../views/interaction/detail.vue'
+          )
+      }
+    ]
+  },
+  {
+    path: '/disease',
+    name: 'Disease',
+    redirect: '/disease/search',
+    component: { render: h => h('router-view', '') },
+    children: [
+      {
+        path: 'search',
+        name: 'DiseaseSearch',
+        component: () =>
+          import(/* webpackChunkName: "disease" */ '../views/disease/index.vue')
+      },
+      {
+        path: 'detail',
+        name: 'DiseaseDetail',
+        component: () =>
+          import(
+            /* webpackChunkName: "disease" */ '../views/disease/detail.vue'
           )
       }
     ]

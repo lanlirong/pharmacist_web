@@ -1,7 +1,6 @@
 import XLSX from 'xlsx';
 export const getObjValueArr = obj => {
   if (Object.prototype.toString.call(obj) === '[object Object]') {
-    console.log(obj);
     let values = [];
     for (let item in obj) {
       values.push(obj[item]);
