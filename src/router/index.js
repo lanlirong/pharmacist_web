@@ -84,6 +84,28 @@ const routes = [
     ]
   },
   {
+    path: '/consult',
+    name: 'Consult',
+    redirect: '/consult/search',
+    component: { render: h => h('router-view', '') },
+    children: [
+      {
+        path: 'search',
+        name: 'ConsultSearch',
+        component: () =>
+          import(/* webpackChunkName: "consult" */ '../views/consult/index.vue')
+      },
+      {
+        path: 'detail',
+        name: 'ConsultDetail',
+        component: () =>
+          import(
+            /* webpackChunkName: "consult" */ '../views/consult/detail.vue'
+          )
+      }
+    ]
+  },
+  {
     path: '/error',
     name: '/error',
     component: () =>

@@ -33,7 +33,8 @@ import {
   PageHeader,
   Spin,
   Select,
-  Empty
+  Empty,
+  Tabs
 } from 'ant-design-vue';
 
 Vue.config.productionTip = false;
@@ -63,6 +64,7 @@ Vue.use(PageHeader);
 Vue.use(Spin);
 Vue.use(Select);
 Vue.use(Empty);
+Vue.use(Tabs);
 
 Vue.prototype.$message = message;
 

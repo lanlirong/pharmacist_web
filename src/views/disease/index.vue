@@ -40,6 +40,11 @@ export default {
   },
   methods: {
     async getList() {
+      const { searchKey } = this.searchForm;
+      if (searchKey == '') {
+        this.$message.warning('输入不能为空');
+        return;
+      }
       this.tableLoading = true;
       try {
         const { data } = await _getList({ ...this.searchForm });

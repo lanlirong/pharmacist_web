@@ -8,3 +8,6 @@ export const _getList = (params = {}) => {
 export const _getDetail = (params = {}) => {
   return axios.get(`/api/consult/detail/${params.id}`);
 };
+export const _getBooks = () => {
+  return axios.get('/api/consult/books');
+};

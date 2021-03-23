@@ -15,7 +15,7 @@ instance.interceptors.request.use(config => {
 instance.interceptors.response.use(
   response => {
     let { status, data } = response;
-    if (status !== 200) {
+    if (!status || status !== 200) {
       message.error('status:' + status);
       return Promise.reject(data);
     } else {
