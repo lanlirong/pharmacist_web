@@ -7,7 +7,9 @@
 .middle .ant-descriptions-item-colon {
   width: 126px;
 }
-.disease .bottom .ant-descriptions-item-colon {
+.disease .bottom .ant-descriptions-item-colon,
+.consult .top .ant-descriptions-item-colon,
+.consult .bottom .ant-descriptions-item-colon {
   width: 126px;
 }
 #main

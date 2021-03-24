@@ -28,7 +28,12 @@
           </a-radio-group>
         </a-tab-pane>
         <a-tab-pane key="1" tab="书名" force-render>
-          <a-select placeholder="下拉选择" size="large" @change="handleChange">
+          <a-select
+            :value="searchForm.searchKey"
+            placeholder="下拉选择"
+            size="large"
+            @change="handleChange"
+          >
             <a-select-option
               v-for="(item, index) in books"
               :value="item.B_ISBN"
@@ -50,9 +55,9 @@ export default {
   data() {
     return {
       searchForm: {
-        searchKey: '百日咳',
+        searchKey: '糖尿病',
         type: 0,
-        way: 0
+        way: 0 // 0关键词 1 书名
       },
       radioArr: CONSULT_TYPE_ARR,
       books: []
@@ -71,12 +76,16 @@ export default {
     changeTabs(activeKey) {
       if (activeKey == 1) this.getBooks();
       this.searchForm.way = activeKey;
+      this.searchForm.searchKey = '';
+      console.log(this.searchForm.searchKey);
+      this.$emit('changeTabs');
     },
     search() {
       this.$emit('search', this.searchForm);
     },
     handleChange(value) {
       this.searchForm.searchKey = value;
+      this.$emit('search', this.searchForm);
     }
   }
 };

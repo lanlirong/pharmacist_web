@@ -4,92 +4,40 @@
       <span class="total-text">共查询到{{ total }}条数据</span>
     </div>
     <div class="list">
-      <a-table
-        :data-source="tableList"
-        :loading="tableLoading"
-        :rowKey="row => row.id"
-        :row-selection="{
-          selectedRowKeys: selectedRowKeys,
-          onChange: onSelectChange
-        }"
-        :pagination="pagination"
-        @change="handleTableChange"
-      >
-        <a-table-column
-          title="疾病名称"
-          key="name"
-          :width="130"
-          :sorter="true"
-          :ellipsis="true"
-          ><template slot-scope="{ name, id }">
-            <router-link :to="`/disease/detail?id=${id}`" target="_blank">{{
-              name | placeholder
-            }}</router-link>
-          </template></a-table-column
-        >
-        <a-table-column
-          title="发病人群"
-          data-index="crowd"
-          key="crowd"
-          :width="100"
-          :ellipsis="true"
-          ><template slot-scope="crowd">{{
-            crowd | placeholder
-          }}</template></a-table-column
-        >
-        <a-table-column
-          title="治疗方式"
-          data-index="treatWay"
-          key="treatWay"
-          :width="200"
-          :ellipsis="true"
-          ><template slot-scope="treatWay">{{
-            treatWay | placeholder
-          }}</template></a-table-column
-        >
-        <a-table-column
-          title="治疗周期"
-          data-index="cycle"
-          key="cycle"
-          :width="80"
-          :ellipsis="true"
-          ><template slot-scope="cycle">{{
-            cycle | placeholder
-          }}</template></a-table-column
-        >
-        <a-table-column
-          title="治愈率"
-          data-index="rate"
-          key="rate"
-          :width="80"
-          :ellipsis="true"
-          ><div slot-scope="rate">
-            <a-tag v-if="rate" :color="rate_tag_color(rate)">
-              {{ rate | ellipsisRate }} </a-tag
-            ><span v-else>---</span>
-          </div></a-table-column
-        >
-        <a-table-column :width="110" key="action">
-          <template slot-scope="row">
-            <router-link :to="`/disease/detail?id=${row.id}`" target="_blank">
-              <a-tooltip placement="top" title="详情"
-                ><a-button type="link"><a-icon type="file-text"/></a-button
-              ></a-tooltip>
-            </router-link>
-            <a-tooltip placement="top" title="下载"
-              ><a-button type="link" @click="download(row)"
-                ><a-icon type="download"/></a-button></a-tooltip></template
-        ></a-table-column>
-      </a-table>
+      <!-- loading -->
+      <loading v-if="dataLoading" tip="加载中" />
+      <ul v-if="dataList.length > 0">
+        <li v-for="(item, index) in dataList" :key="index">
+          <router-link :to="`/consult/detail?id=${item.id}`" target="_blank">
+            <div class="title">
+              {{ (page - 1) * size + index + 1 + '、'
+              }}<span v-html="redText(item.Q_content)"></span>
+            </div>
+            <div class="content" v-html="redText(item.Q_answer)"></div>
+          </router-link>
+        </li>
+      </ul>
+      <div v-else><a-list :data-source="[]" /></div>
+      <a-pagination
+        :pageSize="size"
+        :total="total"
+        :showTotal="
+          (total, range) => `第${range[0]}-${range[1]}条 / 共${total}条 `
+        "
+        show-less-items
+        @change="pageChange"
+      />
     </div>
   </div>
 </template>
 <script>
-import { RATE_COLOR } from '@/utils/constant/disease.js';
-
 export default {
   props: {
-    tableLoading: {
+    searchKey: {
+      type: [String, Number],
+      default: ''
+    },
+    dataLoading: {
       type: Boolean,
       default: false
     },
@@ -105,59 +53,30 @@ export default {
       type: Number,
       default: 20
     },
-    tableList: {
+    dataList: {
       type: Array,
       default: () => []
     }
   },
   data() {
-    return {
-      selectedRowKeys: [] // Check here to configure the default column
-    };
-  },
-  computed: {
-    pagination() {
-      return {
-        total: this.total,
-        showTotal: (total, range) =>
-          `第${range[0]}-${range[1]}条 / 共${total}条 `,
-        pageSize: this.size,
-        current: this.page
-      };
-    },
-    rate_tag_color() {
-      return function(params) {
-        // eslint-disable-next-line use-isnan
-        if (
-          params.indexOf('%') == -1 ||
-          isNaN(parseFloat(params.split('%')[0]))
-        )
-          return '';
-        if (params > '80%') return RATE_COLOR[0];
-        if (params > '50%') return RATE_COLOR[1];
-        return RATE_COLOR[2];
-      };
-    }
-  },
-  filters: {
-    ellipsisRate: function(params) {
-      if (params.length > 6) return params.substr(0, 6) + '...';
-      return params;
-    }
+    return {};
   },
   mounted() {},
   methods: {
-    onSelectChange(selectedRowKeys) {
-      this.selectedRowKeys = selectedRowKeys;
+    redText(val) {
+      val = val + '';
+      if (this.searchKey !== '') {
+        return val.replace(
+          this.searchKey,
+          '<font color="red">' + this.searchKey + '</font>'
+        );
+      } else {
+        return val;
+      }
     },
-    handleTableChange(pagination, filters, sorter) {
-      const { current, pageSize } = pagination;
-      const searchForm = {};
-      searchForm.page = current;
-      searchForm.size = pageSize;
-      searchForm.order = sorter.order === 'descend' ? 'desc' : 'asc';
-
-      this.$emit('tableChange', searchForm);
+    pageChange(page) {
+      const searchForm = { page, size: this.size };
+      this.$emit('pageChange', searchForm);
     }
   }
 };
@@ -183,25 +102,43 @@ export default {
       color: @theme-color;
       padding: 0 5px;
     }
-    button {
-      .anticon {
-        margin-right: -8px;
-      }
-    }
     .total-text {
       float: right;
     }
   }
   .list {
     flex: 1;
-    .ant-btn {
-      padding: 0 10px;
-    }
-    a {
-      color: @text-link;
-      &:hover {
-        text-decoration: underline;
+    min-height: 160px;
+    position: relative;
+    li {
+      padding: 20px;
+      border-bottom: @border;
+      line-height: 20px;
+
+      .title {
+        padding-bottom: 10px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
       }
+      .content {
+        color: @text-color;
+        text-indent: 20px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+      }
+      &:hover {
+        background-color: @hover-bg-color;
+      }
+    }
+    .ant-pagination {
+      float: right;
+      margin-top: 20px;
     }
   }
 }

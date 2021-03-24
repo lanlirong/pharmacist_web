@@ -1,13 +1,14 @@
 <template>
   <div class="consult">
-    <search @search="search" />
+    <search @search="search" @changeTabs="changeTabs" />
     <result
-      :tableLoading="tableLoading"
+      :searchKey="searchForm.searchKey"
+      :dataLoading="dataLoading"
       :total="total"
       :page="searchForm.page"
       :size="20"
-      :tableList="tableList"
-      @tableChange="tableChange"
+      :dataList="dataList"
+      @pageChange="pageChange"
     />
     <introduction />
   </div>
@@ -17,7 +18,7 @@
 import search from './components/search';
 import result from './components/result';
 import introduction from './components/introduction';
-import { _getList } from '@/services/api/disease';
+import { _getList } from '@/services/api/consult';
 
 export default {
   components: {
@@ -27,15 +28,16 @@ export default {
   },
   data() {
     return {
-      tableLoading: false,
+      dataLoading: false,
       total: 0,
       searchForm: {
         searchKey: '',
         page: 1,
-        size: 20
-        // order: 'asc'
+        size: 20,
+        type: 0,
+        way: 0
       },
-      tableList: []
+      dataList: []
     };
   },
   methods: {
@@ -45,32 +47,37 @@ export default {
         this.$message.warning('输入不能为空');
         return;
       }
-      this.tableLoading = true;
+      this.dataLoading = true;
       try {
         const { data } = await _getList({ ...this.searchForm });
-        this.tableLoading = false;
+        this.dataLoading = false;
         this.total = data.total;
         this.searchForm.page = data.current_page;
-        this.tableList = data.data;
+        this.dataList = data.data;
       } catch (error) {
-        this.tableLoading = false;
+        this.dataLoading = false;
       }
     },
     search(searchForm) {
-      const { searchKey } = searchForm;
+      const { searchKey, type, way } = searchForm;
       if (searchKey == '') {
         this.$message.warning('输入不能为空');
         return;
       }
       this.searchForm.searchKey = searchKey;
+      this.searchForm.type = type;
+      this.searchForm.way = way;
       this.getList();
     },
-    tableChange(searchForm) {
-      const { page, size, order } = searchForm;
+    pageChange(searchForm) {
+      const { page, size } = searchForm;
       this.searchForm.page = page || 1;
       this.searchForm.size = size || 20;
-      this.searchForm.order = order || 'asc';
       this.getList();
+    },
+    changeTabs() {
+      this.dataList = [];
+      this.total = 0;
     }
   }
 };

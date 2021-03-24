@@ -1,13 +1,14 @@
 import axios from '../http';
-export const _recommend = () => {
-  return axios.get('/api/consult/recommend');
-};
 export const _getList = (params = {}) => {
-  return axios.get(`/api/consult/list/${params.id}`);
+  return axios.post('/api/consult/list', { ...params });
 };
-export const _getDetail = (params = {}) => {
-  return axios.get(`/api/consult/detail/${params.id}`);
+export const _getOne = (params = {}) => {
+  return axios.get('/api/consult/one', { params });
 };
+export const _getConsultCount = () => {
+  return axios.get('/api/consult/count');
+};
+
 export const _getBooks = () => {
   return axios.get('/api/consult/books');
 };
