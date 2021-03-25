@@ -4,19 +4,19 @@
       <li>
         <h2>功能介绍</h2>
         <div class="des">
-          <p>常见疾病的基本信息以及常用治疗药物检索</p>
+          <p>常见疾病的用药咨询及标准化解答</p>
           <p>
-            输入疾病名称，结果可按疾病名称首字母排序，点击详情查看详细信息。
+            提供关键词查询和书名查询。关键词默认查询全部字段，也提供单选框选择，从一个字段中匹配；书名查询只能下拉选择。
           </p>
-          <p>可单条或者批量下载成excel格式数据。</p>
         </div>
       </li>
       <li>
         <h2>数据说明</h2>
         <div class="des">
-          <p>疾病数据库目前累记收录{{ count }}条数据。</p>
+          <p>用药咨询数据库目前累记收录{{ count }}条数据。</p>
           <p>
-            数据包括疾病名称、疾病简介、发病人群、传染性、并发症、治疗方式、治疗周期、治愈率字段，以及常用治疗药物。
+            数据包括问题内容、问题回答，部分问题给予相关知识链接。
+            数据主要摘录于用药咨询标准化手册，文末给出参考文献以及来源书籍。
           </p>
         </div>
       </li>
@@ -33,7 +33,7 @@
   </div>
 </template>
 <script>
-import { _getDiseaseCount } from '@/services/api/disease';
+import { _getConsultCount } from '@/services/api/consult';
 export default {
   data() {
     return {
@@ -41,11 +41,11 @@ export default {
     };
   },
   mounted() {
-    this.getDiseaseCount();
+    this.getConsultCount();
   },
   methods: {
-    async getDiseaseCount() {
-      const { data } = await _getDiseaseCount();
+    async getConsultCount() {
+      const { data } = await _getConsultCount();
       this.count = data;
     }
   }

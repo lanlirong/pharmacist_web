@@ -11,28 +11,11 @@
         <a-descriptions-item label="问题类型">
           <a-tag color="orange"> {{ consult.K_type | placeholder }}</a-tag>
         </a-descriptions-item>
-
-        <a-descriptions-item label="问题回答">
-          {{ consult.Q_answer | placeholder }}
-          <ul class="picture" v-if="consult.isanswerUrl == 0">
-            <li v-if="consult.answerPS1">
-              <img :src="answerUrl1" alt="" />
-              <div class="des">{{ consult.answerPS1 }}</div>
-            </li>
-            <li v-if="consult.answerPS2">
-              <img src="" alt="" />
-              <div class="des">{{ consult.answerPS2 }}</div>
-            </li>
-          </ul>
-        </a-descriptions-item>
         <a-descriptions-item label="知识链接">
           {{ consult.K_link | placeholder }}
-          <ul class="picture" v-if="consult.islinkUrl == 1">
-            <li>
-              <img src="" alt="" />
-              <div class="des">{{ consult.linkPS1 }}</div>
-            </li>
-          </ul>
+        </a-descriptions-item>
+        <a-descriptions-item label="问题回答">
+          {{ consult.Q_answer | placeholder }}
         </a-descriptions-item>
       </a-descriptions>
     </div>
@@ -45,6 +28,65 @@
         <a-descriptions-item label="来源书籍">
           {{ consult.B_name | placeholder }} ( ISBN:
           {{ consult.B_ISBN | placeholder }} )
+        </a-descriptions-item>
+      </a-descriptions>
+    </div>
+    <div class="bottom">
+      <!-- 链接图片 -->
+      <a-descriptions bordered v-if="consult.islinkUrl === 1" :column="1">
+        <a-descriptions-item :label="consult.linkPS1">
+          <ul class="picture">
+            <li>
+              <img
+                v-for="(item, index) in consult.linkUrl1"
+                :key="index"
+                :src="item"
+                alt=""
+              />
+            </li>
+          </ul>
+        </a-descriptions-item>
+        <a-descriptions-item v-if="consult.linkUrl2" :label="consult.linkPS2">
+          <ul class="picture">
+            <li>
+              <img
+                v-for="(item, index) in consult.linkUrl2"
+                :key="index"
+                :src="item"
+                alt=""
+              />
+            </li>
+          </ul>
+        </a-descriptions-item>
+      </a-descriptions>
+      <!-- 回答图片 -->
+      <a-descriptions bordered v-if="consult.isanswerUrl === 0" :column="1">
+        <a-descriptions-item :label="consult.answerPS1">
+          <ul class="picture">
+            <li>
+              <img
+                v-for="(item, index) in consult.answerUrl1"
+                :key="index"
+                :src="item"
+                alt=""
+              />
+            </li>
+          </ul>
+        </a-descriptions-item>
+        <a-descriptions-item
+          v-if="consult.answerUrl2"
+          :label="consult.answerPS2"
+        >
+          <ul class="picture">
+            <li>
+              <img
+                v-for="(item, index) in consult.answerUrl2"
+                :key="index"
+                :src="item"
+                alt=""
+              />
+            </li>
+          </ul>
         </a-descriptions-item>
       </a-descriptions>
     </div>
@@ -92,7 +134,7 @@ export default {
       this.loading = true;
       try {
         const { data } = await _getOne({ id: this.$route.query.id });
-        // this.consult = data;
+        this.consult = data;
         this.loading = false;
       } catch (error) {
         this.loading = false;
@@ -124,18 +166,23 @@ export default {
     .ant-descriptions {
       flex: 1;
     }
-    .picture {
-      width: 100%;
-      display: flex;
-      li {
-        flex: 1;
-        height: 100px;
-        border: 1px solid red;
-      }
-    }
   }
   .middle {
     width: 100%;
+  }
+  .bottom {
+    width: 100%;
+
+    .picture {
+      width: 100%;
+      display: flex;
+      padding: 16px 24px;
+      li {
+        img {
+          width: 50%;
+        }
+      }
+    }
   }
 }
 </style>
