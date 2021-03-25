@@ -75,7 +75,6 @@
 <script>
 import hotArticle from './hot-article';
 import hotPost from './hot-post';
-import { _recommend } from '@/services/api/consult.js';
 export default {
   name: 'Home',
   components: { hotArticle, hotPost },
@@ -84,14 +83,8 @@ export default {
       searchKey: ''
     };
   },
-  mounted() {
-    this.getrecommend();
-  },
+  mounted() {},
   methods: {
-    async getrecommend() {
-      const data = await _recommend({});
-      console.log(data);
-    },
     toSearch(path) {
       let routeData = this.$router.resolve('/' + path);
       window.open(routeData.href, '_blank');
