@@ -106,6 +106,28 @@ const routes = [
     ]
   },
   {
+    path: '/science',
+    name: 'science',
+    redirect: '/science/search',
+    component: { render: h => h('router-view', '') },
+    children: [
+      {
+        path: 'search',
+        name: 'scienceSearch',
+        component: () =>
+          import(/* webpackChunkName: "science" */ '../views/science/index.vue')
+      },
+      {
+        path: 'detail',
+        name: 'scienceDetail',
+        component: () =>
+          import(
+            /* webpackChunkName: "science" */ '../views/science/detail.vue'
+          )
+      }
+    ]
+  },
+  {
     path: '/error',
     name: '/error',
     component: () =>
@@ -119,7 +141,7 @@ const routes = [
 ];
 
 const router = new VueRouter({
-  mode: 'history',
+  mode: 'hash',
   base: process.env.BASE_URL,
   routes
 });

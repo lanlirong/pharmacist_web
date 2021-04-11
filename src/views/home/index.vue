@@ -55,6 +55,13 @@
         <p class="item-title">不良反应共建</p>
         <p class="item-des">发布药物不良反应案例，共建不良反应信息库</p>
       </li> -->
+      <!-- <li>
+        <a-carousel :after-change="onChange">
+          <div><h3>1</h3></div>
+          <div><h3>2</h3></div>
+          <div><h3>3</h3></div>
+        </a-carousel>
+      </li> -->
       <li @click="toSearch('community')">
         <div class="item-img"><svg-icon iconClass="community"></svg-icon></div>
         <p class="item-title">药师社区</p>
@@ -88,6 +95,9 @@ export default {
     toSearch(path) {
       let routeData = this.$router.resolve('/' + path);
       window.open(routeData.href, '_blank');
+    },
+    onChange(a, b, c) {
+      console.log(a, b, c);
     }
   }
 };
@@ -134,7 +144,7 @@ export default {
     padding-bottom: 90px;
     margin-bottom: 0;
     li {
-      width: 270px;
+      width: 350px;
       margin-top: 20px;
       background-color: #fff;
       border-radius: 4px;

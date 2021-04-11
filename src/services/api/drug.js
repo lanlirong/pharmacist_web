@@ -1,14 +1,14 @@
 import axios from '../http';
 
 export const _getList = (params = {}) => {
-  return axios.post('/api/drug/list', { ...params });
+  return axios.post('/drug/list', { ...params });
 };
 export const _getFilterList = (params = {}) => {
-  return axios.post('/api/drug/filterList', { ...params });
+  return axios.post('/drug/filterList', { ...params });
 };
 export const _getDetail = (params = {}) => {
-  return axios.get('/api/drug/one', { params });
+  return axios.get('/drug/one', { params });
 };
 export const _getDrugCount = () => {
-  return axios.get('/api/drug/count');
+  return axios.get('/drug/count');
 };

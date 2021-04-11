@@ -34,7 +34,8 @@ import {
   Spin,
   Select,
   Empty,
-  Tabs
+  Tabs,
+  Carousel
 } from 'ant-design-vue';
 
 Vue.config.productionTip = false;
@@ -65,6 +66,7 @@ Vue.use(Spin);
 Vue.use(Select);
 Vue.use(Empty);
 Vue.use(Tabs);
+Vue.use(Carousel);
 
 Vue.prototype.$message = message;
 
