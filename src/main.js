@@ -35,7 +35,10 @@ import {
   Select,
   Empty,
   Tabs,
-  Carousel
+  Modal,
+  Dropdown,
+  Menu,
+  Badge
 } from 'ant-design-vue';
 
 Vue.config.productionTip = false;
@@ -66,7 +69,10 @@ Vue.use(Spin);
 Vue.use(Select);
 Vue.use(Empty);
 Vue.use(Tabs);
-Vue.use(Carousel);
+Vue.use(Modal);
+Vue.use(Dropdown);
+Vue.use(Menu);
+Vue.use(Badge);
 
 Vue.prototype.$message = message;
 

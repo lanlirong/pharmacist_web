@@ -29,6 +29,9 @@ instance.interceptors.response.use(
         // 错误
         VueThis.$router.push('/error');
         message.error(data.msg);
+      } else if (data.code === 4) {
+        // 轻提示错误
+        message.error(data.msg);
       }
       return data;
     }
