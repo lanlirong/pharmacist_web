@@ -7,11 +7,11 @@
       </div>
       <a-input
         size="large"
-        placeholder="请输入药品或疾病名称"
-        v-model="searchKey"
+        placeholder="快捷查询，请输入药品或疾病名称"
+        v-model.trim="searchKey"
       >
       </a-input>
-      <a-button size="large" type="primary">搜索</a-button>
+      <a-button size="large" type="primary" @click="search">搜索</a-button>
     </div>
     <!-- 搜索 -->
     <!-- 入口 -->
@@ -82,12 +82,13 @@
 <script>
 import hotArticle from './components/hot-article';
 import hotPost from './components/hot-post';
+import { _getList } from '@/services/api/common.js';
 export default {
   name: 'Home',
   components: { hotArticle, hotPost },
   data() {
     return {
-      searchKey: ''
+      searchKey: '根痛平胶囊'
     };
   },
   mounted() {},
@@ -98,6 +99,22 @@ export default {
     },
     onChange(a, b, c) {
       console.log(a, b, c);
+    },
+    async search() {
+      if (this.searchKey == '') {
+        this.$message.warn('输入不能为空');
+        return;
+      }
+      const { data } = await _getList({ searchKey: this.searchKey });
+      if (data.drug && data.disease) {
+        this.$message.warn('结果包含多种，请至各种类查询页详细搜索！');
+      } else if (data.drug) {
+        this.$router.push('/drug/search?searchkey=' + this.searchKey);
+      } else if (data.disease) {
+        this.$router.push('/disease/detail?id=' + data.disease);
+      } else {
+        this.$message.warn('快捷查询没有找到，请至各种类查询页详细搜索！');
+      }
     }
   }
 };

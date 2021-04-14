@@ -6,13 +6,15 @@
     </div>
     <a-card style="width:400px">
       <div>
-        <a-list item-layout="horizontal" :data-source="data">
+        <a-list item-layout="horizontal" :data-source="list">
           <a-list-item slot="renderItem" slot-scope="item">
-            <a-list-item-meta
-              description="Ant Design, a design language for background applications, is refined by Ant UED Team,"
-            >
-              <a slot="title" href="https://www.antdv.com/">{{ item.title }}</a>
-            </a-list-item-meta>
+            <router-link :to="`science/detail?id=${item.id}`" target="_blank">
+              <a-list-item-meta :description="item.description">
+                <a slot="title" href="https://www.antdv.com/">{{
+                  item.title
+                }}</a>
+              </a-list-item-meta>
+            </router-link>
           </a-list-item>
         </a-list>
       </div>
@@ -20,25 +22,23 @@
   </div>
 </template>
 <script>
-const data = [
-  {
-    title: 'Ant Design Title 1'
-  },
-  {
-    title: 'Ant Design Title 2'
-  },
-  {
-    title: 'Ant Design Title 3'
-  },
-  {
-    title: 'Ant Design Title 4'
-  }
-];
+import { _getHotList } from '@/services/api/science.js';
+const data = [];
 export default {
   data() {
     return {
-      data
+      data,
+      list: []
     };
+  },
+  mounted() {
+    this.getHotList();
+  },
+  methods: {
+    async getHotList() {
+      const { data, code } = await _getHotList();
+      this.list = data || [];
+    }
   }
 };
 </script>

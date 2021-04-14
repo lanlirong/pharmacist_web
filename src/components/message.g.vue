@@ -63,11 +63,12 @@ export default {
     };
   },
   mounted() {
-    this.getMsgList();
+    // this.getMsgList();
   },
   methods: {
     showChat() {
       if (localStorage.getItem('phamarcist_user')) {
+        this.getMsgList();
         this.showWindow = true;
       } else {
         this.$message.warning('请先注册并登录系统');

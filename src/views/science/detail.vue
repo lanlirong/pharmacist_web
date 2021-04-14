@@ -1,9 +1,9 @@
 <template>
   <div class="detail-container article">
     <loading v-if="loading" tip="数据加载中..." size="large" />
-    <h2>
+    <h1>
       {{ article.title | placeholder }}
-    </h2>
+    </h1>
     <div class="info">
       <p>作者：{{ article.creator }}</p>
       <p>最后修改于：{{ article.updateTime }}</p>
@@ -52,7 +52,7 @@ export default {
 };
 </script>
 
-<style lang="less" scoped>
+<style lang="less">
 .detail-container {
   width: 1200px;
   margin: 20px auto;
@@ -72,7 +72,7 @@ export default {
     }
   }
 
-  h2 {
+  h1 {
     width: 100%;
     // margin-bottom: 20px;
     font-size: 20px;
@@ -90,6 +90,78 @@ export default {
   }
   .content {
     width: 100%;
+    line-height: 1.5em;
+    blockquote {
+      border-left: 4px solid #ccc;
+      margin-bottom: 5px;
+      margin-top: 5px;
+      padding-left: 16px;
+    }
+    ol {
+      padding-left: 1.5em;
+      li {
+        counter-reset: list-1 list-2 list-3 list-4 list-5 list-6 list-7 list-8
+          list-9;
+        counter-increment: list-0;
+      }
+      li:not(.ql-direction-rtl)::before {
+        margin-left: -1.5em;
+        margin-right: 0.3em;
+        text-align: right;
+      }
+      li:before {
+        content: counter(list-0, decimal) '. ';
+        display: inline-block;
+        white-space: nowrap;
+        width: 1.2em;
+      }
+    }
+    ul {
+      padding-left: 1.5em;
+      li:not(.ql-direction-rtl)::before {
+        content: '\2022';
+        margin-left: -1.5em;
+        margin-right: 0.3em;
+        text-align: right;
+        display: inline-block;
+        white-space: nowrap;
+        width: 1.2em;
+      }
+      li:not(.ql-direction-rtl) {
+        padding-left: 1.5em;
+      }
+    }
+    .ql-indent-1 {
+      padding-left: 3em;
+    }
+    .ql-indent-2 {
+      padding-left: 6em;
+    }
+    .ql-indent-3 {
+      padding-left: 9em;
+    }
+    .ql-indent-4 {
+      padding-left: 12em;
+    }
+    .ql-indent-5 {
+      padding-left: 15em;
+    }
+    h2 {
+      font-weight: 700;
+      font-size: 18px;
+    }
+    h3 {
+      font-weight: 500;
+      font-size: 16px;
+    }
+    h4 {
+      font-weight: 400;
+      font-size: 14px;
+    }
+    img {
+      width: unset;
+      max-width: 100%;
+    }
   }
 }
 </style>

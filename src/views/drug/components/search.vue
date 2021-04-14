@@ -43,7 +43,12 @@ export default {
       palceText: '请输入药品名，例如三七'
     };
   },
-  mounted() {},
+  mounted() {
+    if (this.$route.query.searchkey) {
+      this.searchForm.searchKey = this.$route.query.searchkey;
+      this.$emit('search', this.searchForm);
+    }
+  },
   methods: {
     // 修改placeHolder
     onRadioChange(e) {
