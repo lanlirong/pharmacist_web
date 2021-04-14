@@ -7,6 +7,7 @@
     <Footer />
     <!-- 返回顶部 -->
     <a-back-top />
+    <message />
   </div>
 </template>
 
