@@ -19,3 +19,7 @@ export const _login = (params = {}) => {
 export const _logout = (params = {}) => {
   return axios.get('/user/logout', { params });
 };
+
+export const _editMyInfo = (params = {}) => {
+  return axios.post('/user/editMyInfo', { ...params });
+};

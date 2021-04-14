@@ -67,24 +67,18 @@
         </a-tab-pane>
       </a-tabs>
     </a-modal>
-    <!-- 个人信息 -->
-    <a-modal v-model="myVisible" :footer="null" :destroyOnClose="true" centered>
-      <myInfo />
-    </a-modal>
   </div>
 </template>
 
 <script>
 import login from './components/login';
 import register from './components/register';
-import myInfo from './components/myInfo';
 import { _register, _login, _logout } from '@/services/api/user.js';
 
 export default {
   components: {
     login,
-    register,
-    myInfo
+    register
   },
   data() {
     return {
@@ -154,7 +148,7 @@ export default {
       this.visible = false;
     },
     showInfo() {
-      this.myVisible = true;
+      this.$router.push('/myInfo');
     }
   }
 };

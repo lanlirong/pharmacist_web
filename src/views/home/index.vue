@@ -80,8 +80,8 @@
 </template>
 
 <script>
-import hotArticle from './hot-article';
-import hotPost from './hot-post';
+import hotArticle from './components/hot-article';
+import hotPost from './components/hot-post';
 export default {
   name: 'Home',
   components: { hotArticle, hotPost },
