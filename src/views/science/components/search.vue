@@ -21,7 +21,7 @@ export default {
   data() {
     return {
       searchForm: {
-        searchKey: 'test'
+        searchKey: '高血压'
       }
     };
   },

@@ -23,3 +23,10 @@ export const _logout = (params = {}) => {
 export const _editMyInfo = (params = {}) => {
   return axios.post('/user/editMyInfo', { ...params });
 };
+
+export const _sendUserMsg = (params = {}) => {
+  return axios.post('/user/sendUserMsg', { ...params });
+};
+export const _getMsgList = (params = {}) => {
+  return axios.post('/user/getMsgList', { params });
+};

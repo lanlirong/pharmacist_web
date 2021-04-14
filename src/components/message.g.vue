@@ -20,41 +20,17 @@
       <a-icon class="close" type="close" @click="close" />
       <div class="msg-container">
         <ul>
-          <li>
-            <a-avatar
-              slot="avatar"
-              src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"
-            />
-            <div class="msg">
-              <a-icon class="arrow" type="caret-left" />ipayobjects.com/rmspo
-            </div>
-          </li>
-          <li>
-            <a-avatar
-              slot="avatar"
-              src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"
-            />
-            <div class="msg">
-              <a-icon class="arrow" type="caret-left" />ipayobjects.com/rmspo
-            </div>
-          </li>
-          <li>
-            <a-avatar
-              slot="avatar"
-              src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"
-            />
-            <div class="msg">
-              <a-icon class="arrow" type="caret-left" />ipayobjects.com/rmspo
-            </div>
-          </li>
-          <li class="my-msg">
-            <a-avatar
-              v-if="false"
-              slot="avatar"
-              src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"
-            />
-            <div class="msg">
-              ipayobjects.com/rmspo <a-icon class="arrow" type="caret-left" />
+          <li
+            v-for="(item, index) in msgList"
+            :key="index"
+            :class="{ 'my-msg': item.type != 0 }"
+          >
+            <div class="time">{{ item.time }}</div>
+            <div class="messages">
+              <a-avatar v-if="item.type == 0" slot="avatar" :src="avator" />
+              <div class="msg">
+                <a-icon class="arrow" type="caret-left" />{{ item.msg }}
+              </div>
             </div>
           </li>
         </ul>
@@ -65,7 +41,7 @@
           placeholder="输入留言"
           :auto-size="{ minRows: 3, maxRows: 3 }"
         />
-        <a-button type="link">
+        <a-button type="link" @click="send">
           发送
         </a-button>
       </div>
@@ -74,21 +50,50 @@
 </template>
 
 <script>
+import dayjs from 'dayjs';
+import { _sendUserMsg, _getMsgList } from '@/services/api/user.js';
 export default {
   name: 'message',
   data() {
     return {
-      showWindow: true,
-      msg: ''
+      showWindow: false,
+      msg: '临床可以合用而无须调整剂量。',
+      avator: require('@/assets/images/chat.png'),
+      msgList: []
     };
+  },
+  mounted() {
+    this.getMsgList();
   },
   methods: {
     showChat() {
-      this.showWindow = true;
-      console.log(11);
+      if (localStorage.getItem('phamarcist_user')) {
+        this.showWindow = true;
+      } else {
+        this.$message.warning('请先注册并登录系统');
+      }
     },
     close() {
       this.showWindow = false;
+    },
+    async send() {
+      let sedForm = {
+        msg: this.msg,
+        time: dayjs().format('YYYY-MM-DD HH:mm:ss')
+      };
+      const { code } = await _sendUserMsg(sedForm);
+      if (code == 1) {
+        sedForm.type = 1;
+        this.msgList.push(sedForm);
+        this.msg = '';
+      } else {
+        this.$message.error('消息发送失败，请重新发送');
+      }
+    },
+    async getMsgList() {
+      const { data } = await _getMsgList();
+      this.msgList = (data || []).sort((a, b) => a.id - b.id);
+      console.log(this.msgList);
     }
   }
 };
@@ -115,7 +120,7 @@ export default {
         border-radius: 20px;
         width: 40px;
         height: 40px;
-        opacity: 0.7;
+        opacity: 0.5;
 
         animation-name: msgicon;
         animation-duration: 3s;
@@ -156,42 +161,62 @@ export default {
     padding: 10px;
     .close {
       align-self: flex-end;
-      color: #ccc;
+      color: #aaa;
     }
     .msg-container {
       flex: 1;
+      height: calc(100% - 80px);
+      padding-bottom: 20px;
       ul {
+        height: 100%;
+        overflow-y: scroll;
         li {
           display: flex;
+          flex-direction: column;
           margin-top: 20px;
-          .msg {
-            padding-left: 10px;
-            background-color: #fff;
-            border-radius: 4px;
-            padding: 10px 20px;
-            margin-left: 10px;
-            position: relative;
-            .arrow {
-              position: absolute;
-              top: 50%;
-              left: -10px;
-              margin-top: -7px;
-              color: #fff;
+          .time {
+            font-size: 12px;
+            color: #ccc;
+            margin-left: 46px;
+            margin-bottom: 6px;
+          }
+          .messages {
+            display: flex;
+            .msg {
+              padding-left: 10px;
+              background-color: #fff;
+              border-radius: 4px;
+              padding: 10px 20px;
+              margin-left: 10px;
+              position: relative;
+              .arrow {
+                position: absolute;
+                top: 50%;
+                left: -10px;
+                margin-top: -7px;
+                color: #fff;
+              }
             }
           }
         }
         .my-msg {
           display: flex;
-          flex-direction: row-reverse;
-          .msg {
-            background-color: @theme-color-1;
-            color: #fff;
-            position: relative;
-            .arrow {
-              position: absolute;
-              top: 50%;
-              right: 0;
-              //   margin-top: -7px;
+          flex-direction: column;
+          align-items: flex-end;
+          .messages {
+            display: flex;
+            .msg {
+              background-color: @theme-color-1;
+              color: #fff;
+              position: relative;
+              .arrow {
+                position: absolute;
+                top: 50%;
+                right: -100%;
+                transform: rotateY(180deg);
+                margin-right: -14px;
+                color: @theme-color-1;
+              }
             }
           }
         }
@@ -217,7 +242,7 @@ export default {
     border-radius: 20px;
     width: 40px;
     height: 40px;
-    opacity: 0.7;
+    opacity: 0.5;
   }
   to {
     transform: translate(-25px, -25px);
