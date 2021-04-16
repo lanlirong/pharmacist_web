@@ -134,6 +134,30 @@ const routes = [
     ]
   },
   {
+    path: '/community',
+    name: 'community',
+    redirect: '/community/search',
+    component: { render: h => h('router-view', '') },
+    children: [
+      {
+        path: 'search',
+        name: 'communitySearch',
+        component: () =>
+          import(
+            /* webpackChunkName: "community" */ '../views/community/index.vue'
+          )
+      },
+      {
+        path: 'detail',
+        name: 'communityDetail',
+        component: () =>
+          import(
+            /* webpackChunkName: "community" */ '../views/science/detail.vue'
+          )
+      }
+    ]
+  },
+  {
     path: '/error',
     name: '/error',
     component: () =>

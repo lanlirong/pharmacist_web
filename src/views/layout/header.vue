@@ -74,6 +74,7 @@
 import login from './components/login';
 import register from './components/register';
 import { _register, _login, _logout } from '@/services/api/user.js';
+import { getCookie } from '@/utils/tool.js';
 
 export default {
   components: {
@@ -93,7 +94,8 @@ export default {
   },
   mounted() {
     let user = localStorage.getItem('phamarcist_user');
-    if (user) {
+    let uer_cookie = getCookie('PHPSESSID');
+    if (user && uer_cookie) {
       this.userInfo = JSON.parse(user);
     }
   },

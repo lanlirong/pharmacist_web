@@ -57,7 +57,7 @@ export default {
   data() {
     return {
       showWindow: false,
-      msg: '临床可以合用而无须调整剂量。',
+      msg: '',
       avator: require('@/assets/images/chat.png'),
       msgList: []
     };
@@ -69,7 +69,6 @@ export default {
     showChat() {
       if (localStorage.getItem('phamarcist_user')) {
         this.getMsgList();
-        this.showWindow = true;
       } else {
         this.$message.warning('请先注册并登录系统');
       }
@@ -92,9 +91,11 @@ export default {
       }
     },
     async getMsgList() {
-      const { data } = await _getMsgList();
-      this.msgList = (data || []).sort((a, b) => a.id - b.id);
-      console.log(this.msgList);
+      const { data, code } = await _getMsgList();
+      if (code == 1) {
+        this.msgList = (data || []).sort((a, b) => a.id - b.id);
+        this.showWindow = true;
+      }
     }
   }
 };
@@ -171,6 +172,8 @@ export default {
       ul {
         height: 100%;
         overflow-y: scroll;
+        overflow-x: hidden;
+        line-height: 17px;
         li {
           display: flex;
           flex-direction: column;

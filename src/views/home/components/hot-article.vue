@@ -10,9 +10,7 @@
           <a-list-item slot="renderItem" slot-scope="item">
             <router-link :to="`science/detail?id=${item.id}`" target="_blank">
               <a-list-item-meta :description="item.description">
-                <a slot="title" href="https://www.antdv.com/">{{
-                  item.title
-                }}</a>
+                <a slot="title">{{ item.title }}</a>
               </a-list-item-meta>
             </router-link>
           </a-list-item>

@@ -54,7 +54,12 @@
     <div class="middle">
       <a-descriptions bordered :span="3">
         <a-descriptions-item label="主治疾病">
-          <div v-if="drug.mainDiseases.length > 0">
+          <div
+            v-if="
+              Object.keys(drug).includes('mainDiseases') &&
+                drug.mainDiseases.length > 0
+            "
+          >
             <a v-for="(item, index) in drug.mainDiseases" :key="index">{{
               item
             }}</a>

@@ -41,9 +41,7 @@
             alt="Han Solo"
           />
           <p slot="content">
-            We supply a series of design principles, practical patterns and high
-            quality design resources (Sketch and Axure), to help people create
-            their product prototypes beautifully and efficiently.
+            此功能开发中。。。
           </p>
           <a-tooltip
             slot="datetime"

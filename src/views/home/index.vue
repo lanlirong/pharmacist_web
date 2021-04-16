@@ -88,7 +88,7 @@ export default {
   components: { hotArticle, hotPost },
   data() {
     return {
-      searchKey: '根痛平胶囊'
+      searchKey: ''
     };
   },
   mounted() {},
@@ -113,7 +113,9 @@ export default {
       } else if (data.disease) {
         this.$router.push('/disease/detail?id=' + data.disease);
       } else {
-        this.$message.warn('快捷查询没有找到，请至各种类查询页详细搜索！');
+        this.$message.warn(
+          '快捷查询没有找到，模糊查询请至各种类查询页详细搜索！'
+        );
       }
     }
   }
