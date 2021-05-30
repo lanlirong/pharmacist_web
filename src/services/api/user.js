@@ -9,10 +9,6 @@ export const _checkPhone = (params = {}) => {
 export const _checkEmail = (params = {}) => {
   return axios.get('/user/checkEmail', { params });
 };
-
-export const _register = (params = {}) => {
-  return axios.post('/user/register', { ...params });
-};
 export const _login = (params = {}) => {
   return axios.post('/user/login', { ...params });
 };

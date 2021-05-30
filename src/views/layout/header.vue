@@ -12,9 +12,10 @@
         <span>登录/注册</span>
       </li>
       <li v-else>
-        <a-badge v-if="infoCount !== 0" dot
-          ><svg-icon icon-class="login"
-        /></a-badge>
+        <a-badge v-if="infoCount !== 0" dot>
+          <svg-icon v-if="!userInfo.avatar" icon-class="login" />
+          <a-avatar v-else :src="userInfo.avatar" size="small" />
+        </a-badge>
         <svg-icon v-else icon-class="login" />
         <!-- <span >你好，{{ userInfo.name }} </span> -->
         <a-dropdown>
@@ -73,7 +74,7 @@
 <script>
 import login from './components/login';
 import register from './components/register';
-import { _register, _login, _logout } from '@/services/api/user.js';
+import { _login, _logout } from '@/services/api/user.js';
 import { getCookie } from '@/utils/tool.js';
 
 export default {
@@ -128,7 +129,12 @@ export default {
     async register(val) {
       this.registerLoading = true;
       try {
-        const { code } = await _register(val);
+        const { code } = this.$ajax({
+          url: '/user/register',
+          method: 'post',
+          data: val,
+          headers: { 'content-type': 'multipart/form-data' }
+        });
         if (code == 1) {
           this.$message.success('注册成功');
           this.activeKey = '1';
@@ -144,6 +150,7 @@ export default {
         localStorage.removeItem('phamarcist_user');
         this.userInfo = null;
         this.$message.success('您已退出登录');
+        this.$router.replace('/');
       }
     },
     cancel() {

@@ -2,6 +2,7 @@ import Vue from 'vue';
 import App from './App.vue';
 import router from './router';
 import store from './store';
+import axios from 'axios';
 import './utils/filters'; // 全局过滤器
 import './assets/index'; // svg图标管理
 // antd
@@ -38,7 +39,9 @@ import {
   Modal,
   Dropdown,
   Menu,
-  Badge
+  Badge,
+  Divider,
+  Upload
 } from 'ant-design-vue';
 
 Vue.config.productionTip = false;
@@ -73,9 +76,13 @@ Vue.use(Modal);
 Vue.use(Dropdown);
 Vue.use(Menu);
 Vue.use(Badge);
+Vue.use(Divider);
+Vue.use(Upload);
 
 Vue.prototype.$message = message;
 
+axios.defaults.baseURL = 'http://localhost:80';
+Vue.prototype.$ajax = axios;
 // 注册全局组件
 const requireComponent = require.context(
   // 其组件目录的相对路径

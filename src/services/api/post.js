@@ -5,3 +5,7 @@ export const _publish = (params = {}) => {
 export const _getList = (params = {}) => {
   return axios.post('/post/list', { ...params });
 };
+
+export const _getComment = (params = {}) => {
+  return axios.post('/post/getComment', { ...params });
+};

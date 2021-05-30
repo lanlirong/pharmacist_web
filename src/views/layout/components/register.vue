@@ -30,6 +30,26 @@
         autocomplete="off"
       />
     </a-form-model-item>
+    <a-form-model-item ref="avatar" label="头像">
+      <a-upload
+        name="avatar"
+        list-type="picture-card"
+        class="avatar-uploader"
+        :show-upload-list="false"
+        action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+        :before-upload="beforeUpload"
+        @change="handleChange"
+      >
+        <img v-if="imageUrl" :src="imageUrl" alt="avatar" />
+        <div v-else>
+          <a-icon :type="loading ? 'loading' : 'plus'" />
+          <div class="ant-upload-text">
+            Upload
+          </div>
+        </div>
+      </a-upload>
+    </a-form-model-item>
+
     <a-form-model-item ref="name" label="名字" prop="name">
       <a-input
         v-model="form.name"
@@ -79,6 +99,11 @@
   </a-form-model>
 </template>
 <script>
+function getBase64(img, callback) {
+  const reader = new FileReader();
+  reader.addEventListener('load', () => callback(reader.result));
+  reader.readAsDataURL(img);
+}
 import {
   _checkUsername,
   _checkPhone,
@@ -179,7 +204,8 @@ export default {
         phone: '',
         email: '34524562@qq.com',
         sex: '1',
-        job: '高校老师'
+        job: '高校老师',
+        avatar: null
       },
       rules: {
         username: [
@@ -232,14 +258,27 @@ export default {
           { validator: validateEmail, trigger: 'change' },
           { validator: validateEmail2, trigger: 'blur' }
         ]
-      }
+      },
+      loading: '',
+      avatarObj: null,
+      imageUrl: ''
     };
   },
   methods: {
     onSubmit() {
       this.$refs.ruleForm.validate(valid => {
         if (valid) {
-          this.$emit('comfirm', this.form);
+          const formData = new FormData();
+          formData.append('avatar', this.avatarObj);
+          formData.append('username', this.form.username);
+          formData.append('password', this.form.password);
+          formData.append('name', this.form.name);
+          formData.append('phone', this.form.phone);
+          formData.append('email', this.form.email);
+          formData.append('sex', this.form.sex);
+          formData.append('job', this.form.job);
+
+          this.$emit('comfirm', formData);
         } else {
           console.log('error submit!!');
           return false;
@@ -251,7 +290,45 @@ export default {
     },
     cancel() {
       this.$emit('cancel');
+    },
+    handleChange(info) {
+      if (info.file.status === 'uploading') {
+        this.loading = true;
+        return;
+      }
+      if (info.file.status === 'done') {
+        this.loading = false;
+      }
+    },
+    beforeUpload(file) {
+      const isJpgOrPng =
+        file.type === 'image/jpeg' || file.type === 'image/png';
+      if (!isJpgOrPng) {
+        this.$message.error('只能上传jpeg、jpg、png格式!');
+      }
+      const isLt2M = file.size / 1024 / 1024 < 2;
+      if (!isLt2M) {
+        this.$message.error('图片大小不能超过 2MB!');
+      }
+      // return isJpgOrPng && isLt2M;
+      // console.log(file, 333);
+      this.avatarObj = file;
+      getBase64(file, imageUrl => {
+        this.imageUrl = imageUrl;
+        this.loading = false;
+      });
+      return false;
     }
   }
 };
 </script>
+<style lang="less" scoped>
+.avatar-uploader {
+  width: 104px;
+  height: 104px;
+  img {
+    width: 104px;
+    height: 104px;
+  }
+}
+</style>

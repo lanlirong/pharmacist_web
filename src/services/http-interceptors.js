@@ -10,6 +10,34 @@ const instance = axios.create({
 });
 // 请求拦截
 instance.interceptors.request.use(config => {
+  let params = Object.assign(config.params || {}, {
+    _: Date.now()
+  });
+
+  // post转换成form类型
+  if (config.method.toLowerCase() === 'post') {
+    if (!config.headers['content-type']) {
+      config.headers['content-type'] = 'application/json;charset=UTF-8';
+      // config.headers['content-type'] = 'application/x-www-form-urlencoded';
+    } else {
+      if (
+        config.headers['content-type'].indexOf('x-www-form-urlencoded') > -1
+      ) {
+        let data = config.data;
+        let ret = '';
+        for (let it in data) {
+          ret +=
+            encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&';
+        }
+        config.data = ret;
+      }
+    }
+  }
+
+  if (!config.params) {
+    // post 时强行给url上加上参数
+    config.params = params;
+  }
   return config;
 });
 

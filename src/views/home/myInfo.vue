@@ -1,6 +1,27 @@
 <template>
   <div class="myInfo">
     <div class="title">个人信息</div>
+    <!-- 头像 -->
+    <div class="avatar-container">
+      <a-upload
+        name="avatar"
+        list-type="picture-card"
+        class="avatar-uploader"
+        :show-upload-list="false"
+        :withCredentials="true"
+        :action="serviceUrl"
+        :before-upload="beforeUpload"
+        @change="handleChange"
+      >
+        <img v-if="imageUrl" :src="imageUrl" alt="avatar" />
+        <div v-else>
+          <a-icon :type="loading ? 'loading' : 'plus'" />
+          <div class="ant-upload-text">
+            Upload
+          </div>
+        </div>
+      </a-upload>
+    </div>
     <ul>
       <li>
         <div class="info">
@@ -118,7 +139,13 @@
 </template>
 
 <script>
+function getBase64(img, callback) {
+  const reader = new FileReader();
+  reader.addEventListener('load', () => callback(reader.result));
+  reader.readAsDataURL(img);
+}
 import { _editMyInfo, _checkEmail, _checkPhone } from '@/services/api/user.js';
+import Axios from '@/services/http-interceptors';
 export default {
   name: 'myInfo',
   data() {
@@ -132,13 +159,17 @@ export default {
       editForm: {
         type: '',
         value: ''
-      }
+      },
+      loading: '',
+      imageUrl: '',
+      serviceUrl: Axios.defaults.baseURL + '/user/editAvatar'
     };
   },
   mounted() {
     let myInfo = localStorage.getItem('phamarcist_user');
     if (myInfo) {
       this.myInfo = JSON.parse(myInfo);
+      this.imageUrl = this.myInfo.avatar;
       this.myInfo.phone =
         this.myInfo.phone.substr(0, 3) +
         '****' +
@@ -225,6 +256,36 @@ export default {
       this.phoneV = false;
       this.editForm.type = '';
       this.editForm.value = '';
+    },
+    handleChange(info) {
+      if (info.file.status === 'uploading') {
+        this.loading = true;
+        return;
+      }
+      if (info.file.status === 'done') {
+        this.loading = false;
+        if (info.file.response.code == 1) {
+          let myInfo = JSON.parse(localStorage.getItem('phamarcist_user'));
+          myInfo['avatar'] = info.file.response.data;
+          localStorage.setItem('phamarcist_user', JSON.stringify(myInfo));
+          location.reload();
+          this.$message.success(info.file.response.msg);
+        } else {
+          this.$message.error(info.file.response.msg);
+        }
+      }
+    },
+    beforeUpload(file) {
+      const isJpgOrPng =
+        file.type === 'image/jpeg' || file.type === 'image/png';
+      if (!isJpgOrPng) {
+        this.$message.error('只能上传jpeg、jpg、png格式!');
+      }
+      const isLt2M = file.size / 1024 / 1024 < 2;
+      if (!isLt2M) {
+        this.$message.error('图片大小不能超过 2MB!');
+      }
+      return isJpgOrPng && isLt2M;
     }
   }
 };
@@ -242,6 +303,22 @@ export default {
   display: flex;
   flex-direction: column;
   position: relative;
+  .avatar-container {
+    width: 80px;
+    height: 80px;
+    position: absolute;
+    right: 260px;
+    top: 20px;
+    cursor: pointer;
+    .avatar-uploader {
+      width: 80px;
+      height: 80px;
+      img {
+        width: 80px;
+        height: 80px;
+      }
+    }
+  }
 
   .title {
     font-size: 18px;
@@ -299,7 +376,7 @@ export default {
 
   .my-info-2 {
     position: absolute;
-    top: 10px;
+    bottom: 10px;
     right: -60px;
     transform: rotateY(180deg);
   }
