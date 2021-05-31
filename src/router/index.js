@@ -152,7 +152,7 @@ const routes = [
         name: 'communityDetail',
         component: () =>
           import(
-            /* webpackChunkName: "community" */ '../views/science/detail.vue'
+            /* webpackChunkName: "community" */ '../views/community/detail.vue'
           )
       }
     ]

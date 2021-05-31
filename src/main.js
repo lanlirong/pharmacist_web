@@ -41,7 +41,8 @@ import {
   Menu,
   Badge,
   Divider,
-  Upload
+  Upload,
+  Popconfirm
 } from 'ant-design-vue';
 
 Vue.config.productionTip = false;
@@ -78,6 +79,7 @@ Vue.use(Menu);
 Vue.use(Badge);
 Vue.use(Divider);
 Vue.use(Upload);
+Vue.use(Popconfirm);
 
 Vue.prototype.$message = message;
 

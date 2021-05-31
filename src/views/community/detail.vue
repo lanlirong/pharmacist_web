@@ -10,61 +10,10 @@
       /></a-card>
     </div>
     <div class="post-container">
-      <!--  -->
-      <a-card class="send-message">
-        <a-textarea
-          v-model="post"
-          placeholder="发表点你的观点吧..."
-          :rows="4"
-        />
-        <a-button
-          v-if="!publishLoading"
-          class="publish"
-          type="primary"
-          @click="publish"
-          >发布</a-button
-        >
-        <a-button v-else class="publish" type="primary" loading>发布</a-button>
-      </a-card>
-      <!-- tab -->
-      <div class="tab-wrap">
-        <div class="tabs">
-          <div
-            class="tab"
-            :class="active == 1 ? 'active' : ''"
-            @click="changeTab(1)"
-          >
-            最新帖子
-          </div>
-          <div
-            class="tab"
-            :class="active == 2 ? 'active' : ''"
-            @click="changeTab(2)"
-          >
-            最热帖子
-          </div>
-          <div
-            class="tab"
-            :class="active == 0 ? 'active' : ''"
-            @click="changeTab(0)"
-          >
-            我发布的
-          </div>
-        </div>
-        <a-input-search
-          placeholder="查询帖子"
-          style="width: 200px"
-          @search="onSearch"
-        />
-      </div>
       <!-- 帖子 -->
       <loading v-if="loading" tip="数据加载中..." size="large" />
       <div v-else>
-        <a-card
-          class="post-message"
-          v-for="(post, index) in postList"
-          :key="index"
-        >
+        <a-card class="post-message">
           <div class="post-item">
             <a-comment>
               <template slot="actions">
@@ -74,7 +23,7 @@
                     <a-icon
                       type="like"
                       :theme="post.myLike ? 'filled' : 'outlined'"
-                      @click="changeLike(post)"
+                      @click="changeLike()"
                     />
                   </a-tooltip>
                   <span style="padding-left: '8px';cursor: 'auto'">
@@ -83,31 +32,23 @@
                 </span>
                 <!--  留言-->
                 <span key="comment-basic-reply-to">
-                  <a-icon
-                    type="message"
-                    theme="outlined"
-                    @click="getComment(post)"
-                  /><span style="padding-left: '8px';cursor: 'auto'">
+                  <a-icon type="message" theme="outlined" /><span
+                    style="padding-left: '8px';cursor: 'auto'"
+                  >
                     {{ post.commentTotal }}
                   </span></span
                 >
               </template>
               <a slot="author">{{ post.name }}</a>
               <a-avatar slot="avatar" :src="post.avatar" alt="Han Solo" />
-              <p slot="content" @click="toDetail(post.id)">
-                <span v-if="!post.expand && post.post.length > 150"
-                  >{{ post.post.slice(0, 150) }}...
-                  <em class="expand" @click="expand($event, post)"
-                    >展开</em
-                  ></span
-                >
-                <span v-else>{{ post.post }}</span>
+              <p slot="content">
+                <span>{{ post.post }}</span>
               </p>
               <template slot="datetime" :title="post.createTime">
                 <span>{{ post.createTime }}</span>
               </template>
             </a-comment>
-            <div class="all-comment-container" v-if="post.commentVisible">
+            <div class="all-comment-container">
               <a-divider />
               <!-- 添加评论 -->
               <a-comment>
@@ -119,7 +60,7 @@
                     html-type="submit"
                     :loading="submitLoading"
                     type="primary"
-                    @click="addComment(post)"
+                    @click="addComment()"
                   >
                     添加评论
                   </a-button>
@@ -207,8 +148,6 @@
             </div>
           </div>
         </a-card>
-        <!-- 更多 -->
-        <div class="btn" v-if="!isLast" @click="getMore">查看更多...</div>
       </div>
     </div>
     <!-- 回复弹框 -->
@@ -229,12 +168,10 @@
 
 <script>
 import {
-  _publish,
-  _getList,
-  _getComment,
   _changeLike,
   _addComment,
-  _deleteComment
+  _deleteComment,
+  _getDetail
 } from '@/services/api/post';
 import { getCookie } from '@/utils/tool.js';
 export default {
@@ -242,21 +179,18 @@ export default {
     return {
       action: null,
       active: 2,
-      post: '',
-      params: {
-        size: 10,
-        page: 1,
-        type: 2,
-        searchKey: ''
-      },
-      postList: [],
+      post: null,
       isLast: false,
       loading: false,
-      publishLoading: false,
       submitLoading: false,
       myInfo: {},
       comLoading: false,
       isLastComment: false,
+      params: {
+        id: '',
+        size: 10,
+        page: 1
+      },
       // 弹框
       modelVisible: false,
       confirmLoading: false,
@@ -268,7 +202,7 @@ export default {
     };
   },
   created() {
-    this.getList();
+    this.getDetail();
     let user = localStorage.getItem('phamarcist_user');
     let uer_cookie = getCookie('PHPSESSID');
     if (user && uer_cookie) {
@@ -276,101 +210,33 @@ export default {
     }
   },
   methods: {
-    async publish() {
-      if (this.post == '') {
-        this.$message.warning('输入不能为空');
+    async getDetail() {
+      let id = this.$route.query.id;
+      if (id == '') {
+        this.$message.error('缺少必要参数');
         return;
       }
-      let userId;
-      let userInfo = localStorage.getItem('phamarcist_user');
-      let cookie = getCookie('PHPSESSID');
-      if (cookie && userInfo) {
-        userInfo = JSON.parse(localStorage.getItem('phamarcist_user'));
-        userId = userInfo.id;
-      } else {
-        this.$message.warning('请先登录系统');
-        return;
-      }
-      const payLoad = {
-        post: this.post,
-        userId
-      };
-      this.publishLoading = true;
-      try {
-        const { code } = await _publish(payLoad);
-        if (code == 1) {
-          this.post = '';
-          this.$message.success('发布成功');
-          this.getList();
-        }
-        this.publishLoading = false;
-      } catch (error) {
-        this.publishLoading = false;
-      }
-    },
-    async getList() {
+      this.params.id = id;
       this.loading = true;
       try {
-        const { code, data } = await _getList(this.params);
+        const { code, data } = await _getDetail(this.params);
         if (code == 1) {
-          data &&
-            data.data.forEach(item => {
-              item.commentVisible = false;
-              item.expand = false;
-              item.comment = [];
-              item.myComment = '';
-              item.like = item.like.split(',');
-              item.myLike =
-                item.like.indexOf(String(this.myInfo.id)) > -1 ? true : false;
-            });
-          this.postList = this.postList.concat(data.data || []);
+          this.post = data || {};
           if (
-            (data.current_page - 1) * data.per_page + data.data.length <
-            data.total
-          ) {
-            this.isLast = false;
-          } else {
-            this.isLast = true;
-          }
-          this.loading = false;
-        }
-      } catch (error) {
-        this.loading = false;
-      }
-    },
-    // 查看更多
-    getMore() {
-      this.params.page++;
-      this.getList();
-    },
-    async getComment(post) {
-      post.expand = true;
-      this.comLoading = true;
-      // console.log(post);
-      post.commentVisible = true;
-      try {
-        const payLoad = {
-          postId: post.id,
-          size: 10,
-          page: 1
-        };
-        const { code, data } = await _getComment(payLoad);
-        if (code == 1) {
-          post.comment = post.comment.concat(data.data || []);
-          // console.log(data.data,);
-          if (
-            (data.current_page - 1) * data.per_page + data.data.length <
-            data.total
+            (this.post.comment.current_page - 1) * this.post.comment.per_page +
+              this.post.comment.data.length <
+            this.post.comment.total
           ) {
             this.isLastComment = false;
           } else {
             this.isLastComment = true;
           }
 
-          this.comLoading = false;
+          this.post.comment = this.post.comment.data;
+          this.loading = false;
         }
       } catch (error) {
-        this.comLoading = false;
+        this.loading = false;
       }
     },
     async changeLike(post) {
@@ -387,14 +253,7 @@ export default {
         post.myLike = !post.myLike;
       }
     },
-    onSearch() {},
-    changeTab(type) {
-      this.active = type;
-      this.params.type = type;
-      this.params.page = 1;
-      this.postList = [];
-      this.getList();
-    },
+
     // 添加评论
     async addComment(post) {
       const { id, myComment } = post;
@@ -414,7 +273,7 @@ export default {
         this.$message.success('添加评论成功');
         post.comment = [];
         post.myComment = '';
-        this.getComment(post);
+        this.getDetail();
       }
     },
     async deleteComment(post, item) {
@@ -428,7 +287,7 @@ export default {
       if (code == 1) {
         this.$message.success('删除成功');
         post.comment = [];
-        this.getComment(post);
+        this.getDetail();
       }
     },
     showModal(post = {}, item = {}) {
@@ -453,25 +312,17 @@ export default {
         replyTo: this.currentReplyId,
         commentId: this.currentCommentId
       };
-      const { code } = await _addComment(payLoad);
+      const { code, data } = await _addComment(payLoad);
       if (code == 1) {
         this.$message.success('添加评论成功');
         this.currentPost.comment = [];
-        this.getComment(this.currentPost);
+        this.getDetail();
         this.modelVisible = false;
         this.confirmLoading = false;
       }
     },
-    handleCancel() {
+    handleCancel(e) {
       this.modelVisible = false;
-    },
-    expand(e, post) {
-      e.stopPropagation();
-      post.expand = true;
-    },
-    toDetail(id) {
-      // this.$router.push('/community/detail');
-      window.open(`/#/community/detail?id=${id}`);
     }
   }
 };
